@@ -101,7 +101,7 @@ The example below provides a very simple configuration repository where each `@C
 ```java
 import java.math.*;
 import java.util.concurrent.*;
-import reconf.client.annotations.*;
+import org.blocks4.reconf.client.annotations.*;
 
 @ConfigurationRepository(product="my-product", component="hello-application",
     pollingRate=10, pollingTimeUnit=TimeUnit.MINUTES)
@@ -241,7 +241,7 @@ In the example below, "currency.code" belongs to another component, named "goodb
 ```java
 import java.math.*;
 import java.util.concurrent.*;
-import reconf.client.annotations.*;
+import org.blocks4.reconf.client.annotations.*;
 
 @ConfigurationRepository(product="my-product", component="hello-application",
     pollingRate=10, pollingTimeUnit=TimeUnit.MINUTES)
@@ -272,7 +272,7 @@ package examples;
 
 import java.util.*;
 import java.util.concurrent.*;
-import reconf.client.annotations.*;
+import org.blocks4.reconf.client.annotations.*;
 
 @ConfigurationRepository(product="my-product", component="hello-application",
     pollingRate=1, pollingTimeUnit=TimeUnit.HOURS)
@@ -324,7 +324,7 @@ If you use slf4j (if you don't there are [a lot of reasons](http://logback.qos.c
 
 To activate localized log messages, add a property named `locale` in the reconf.properties file. The locale must comply with the [JDK 6 and JRE 6 Supported Locales](http://www.oracle.com/technetwork/java/javase/locales-137662.html). Besides the default locale (en_US) the library also provides an additional one, Portuguese Brazil (pt_BR).
 
-```xml
+```ini
 locale=pt_BR
 local.cache.location=/export/application/local-cache
 server.url=http://reconf.myserver.com
@@ -354,7 +354,7 @@ Assuming that we are using the interface below.
 package example;
 
 import java.util.concurrent.*;
-import reconf.client.annotations.*;
+import org.blocks4.reconf.client.annotations.*;
 
 @ConfigurationRepository(product="my-product", component="hello-application",
     pollingRate=10, pollingTimeUnit=TimeUnit.MINUTES)
@@ -484,7 +484,7 @@ If you are running ReConf inside a web application, just declare the servlet ins
 ```xml
 <servlet>
     <servlet-name>reconf</servlet-name>
-    <servlet-class>reconf.servlet.AdminServlet</servlet-class>
+    <servlet-class>org.blocks4j.reconf.servlet.AdminServlet</servlet-class>
 </servlet>
 <servlet-mapping>
     <servlet-name>reconf</servlet-name>
@@ -494,14 +494,14 @@ If you are running ReConf inside a web application, just declare the servlet ins
 
 ## Integration with Standalone Applications
 
-In a standalone application, there is the need to start an embedded servlet container in order to make the `reconf.servlet.AdminServlet` available.
+In a standalone application, there is the need to start an embedded servlet container in order to make the `org.blocks4j.reconf.servlet.AdminServlet` available.
 
 The snippet below assumes that the family of `org.eclipse.jetty` packages (jetty-server and jetty-servlet) are configured under the dependencies tag of the `pom.xml` file.
 
 ```java
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.*;
-import reconf.servlet.*;
+import org.blocks4.reconf.servlet.*;
 
 public class ReconfServlet {
 
