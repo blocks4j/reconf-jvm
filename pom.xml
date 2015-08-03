@@ -172,7 +172,9 @@
                 <version>2.5.2</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <releaseProfiles>release-sign-artifacts</releaseProfiles>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
                 </configuration>
             </plugin>
             <plugin>
@@ -237,7 +239,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.0</version>
+                        <version>1.5</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -247,9 +249,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <configuration>
-                            <useAgent>true</useAgent>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
