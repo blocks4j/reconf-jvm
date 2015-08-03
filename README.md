@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/reconf/reconf-jvm.svg?branch=master)](https://travis-ci.org/reconf/reconf-jvm)
+[![Build Status](https://travis-ci.org/reconf/reconf-jvm.svg?branch=master)](https://travis-ci.org/blocks4j/reconf-jvm)
 
 # ReConf JVM in 30 seconds
 
@@ -75,7 +75,7 @@ Add these lines to the `pom.xml` file
 <dependency>
     <groupId>org.blocks4j.reconf</groupId>
     <artifactId>reconf-client</artifactId>
-    <version>${version}</version>
+    <version>${project.version}</version>
 </dependency>
 ```
 
@@ -343,7 +343,7 @@ The package `reconf-spring` provides a class for easy integration with Spring, i
 <dependency>
     <groupId>br.com.uol.reconf</groupId>
     <artifactId>reconf-spring</artifactId>
-    <version>${version}</version>
+    <version>${project.version}</version>
 </dependency>
 ```
 
@@ -461,7 +461,7 @@ The package `reconf-servlet` enables users and/or applications the remote admini
 <dependency>
     <groupId>br.com.uol.reconf</groupId>
     <artifactId>reconf-servlet</artifactId>
-    <version>${version}</version>
+    <version>${project.version}</version>
 </dependency>
 ```
 
