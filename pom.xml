@@ -22,40 +22,42 @@
     <packaging>pom</packaging>
     <version>3.0.3-SNAPSHOT</version>
     <name>ReConf JVM Parent</name>
-    <contributors>
-        <contributor>
+    <description>ReConf JVM Client</description>
+    <url>http://github.com/blocks4j/reconf-jvm</url>
+    <developers>
+        <developer>
             <name>Danilo Mutti</name>
             <url>http://github.com/dmutti</url>
-        </contributor>
-        <contributor>
+        </developer>
+        <developer>
             <name>Marcio Augusto Paes de Moraes</name>
             <url>http://github.com/mmoraesbr</url>
-        </contributor>
-        <contributor>
+        </developer>
+        <developer>
             <name>Pedro Henrique Simoes de Oliveira</name>
             <url>http://github.com/pedrohso</url>
-        </contributor>
-        <contributor>
+        </developer>
+        <developer>
             <name>Marcos Eduardo Bolelli Broinizi</name>
             <email>http://github.com/mbroinizi</email>
-        </contributor>
-        <contributor>
+        </developer>
+        <developer>
             <name>Diego Vitor de Jesus da Rocha</name>
             <url>http://github.com/diegovitorjr</url>
-        </contributor>
-        <contributor>
+        </developer>
+        <developer>
             <name>Andre Paris de Oliveira</name>
             <url>http://github.com/andre-paris</url>
-        </contributor>
-        <contributor>
+        </developer>
+        <developer>
             <name>Leonardo Nascimento Ferreira</name>
             <url>http://github.com/lnferreira</url>
-        </contributor>
-        <contributor>
+        </developer>
+        <developer>
             <name>Andre Ricardo da Silva Souza</name>
             <url>http://github.com/andrericos</url>
-        </contributor>
-    </contributors>
+        </developer>
+    </developers>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
