@@ -20,7 +20,7 @@
     <groupId>org.blocks4j.reconf</groupId>
     <artifactId>reconf-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.0.1</version>
     <name>ReConf JVM Parent</name>
     <contributors>
         <contributor>
@@ -138,7 +138,7 @@
         <url>https://github.com/blocks4j/reconf-jvm.git</url>
         <connection>scm:git:https://github.com/blocks4j/reconf-jvm.git</connection>
         <developerConnection>scm:git:https://github.com/blocks4j/reconf-jvm.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>reconf-parent-3.0.1</tag>
     </scm>
     <issueManagement>
         <system>GitHub Issue Management</system>
