@@ -139,14 +139,13 @@
         </dependencies>
     </dependencyManagement>
     <scm>
-        <url>https://github.com/reconf/reconf-jvm.git</url>
-        <connection>scm:git:https://github.com/reconf/reconf-jvm.git</connection>
-        <developerConnection>scm:git:https://github.com/reconf/reconf-jvm.git</developerConnection>
-        <tag>reconf-parent-1.0.10</tag>
+        <url>https://github.com/blocks4j/reconf-jvm.git</url>
+        <connection>scm:git:https://github.com/blocks4j/reconf-jvm.git</connection>
+        <developerConnection>scm:git:https://github.com/blocks4j/reconf-jvm.git</developerConnection>
     </scm>
     <issueManagement>
         <system>GitHub Issue Management</system>
-        <url>https://github.com/reconf/reconf-jvm/issues</url>
+        <url>https://github.com/blocks4j/reconf-jvm/issues</url>
     </issueManagement>
     <distributionManagement>
         <repository>
