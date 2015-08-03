@@ -58,10 +58,10 @@ public class PropertiesConfigurationParser {
             locale = properties.get("locale");
         }
         if (properties.containsKey("debug")) {
-            debugEnabled = asBoolean(properties.get("debug"));
+            debugEnabled = asBoolean(properties.get("debug"), false);
         }
         if (properties.containsKey("experimental")) {
-            experimentalFeatures = asBoolean(properties.get("experimental"));
+            experimentalFeatures = asBoolean(properties.get("experimental"), false);
         }
     }
 
@@ -77,7 +77,7 @@ public class PropertiesConfigurationParser {
             localCacheSettings.setMaxLogFileSize(asInteger(properties.get("local.cache.max-log-file-size-mb")));
         }
         if (properties.containsKey("local.cache.compressed")) {
-            localCacheSettings.setCompressed(asBoolean(properties.get("local.cache.compressed")));
+            localCacheSettings.setCompressed(asBoolean(properties.get("local.cache.compressed"), true));
         }
     }
 
@@ -112,11 +112,11 @@ public class PropertiesConfigurationParser {
         return timeUnit;
     }
 
-    private Boolean asBoolean(String arg) {
+    private Boolean asBoolean(String arg, boolean returnIfNull) {
         try {
             return Boolean.valueOf(arg);
         } catch (Exception ignored) { }
-        return false;
+        return returnIfNull;
     }
 
     public LocalCacheSettings getLocalCacheSettings() {
