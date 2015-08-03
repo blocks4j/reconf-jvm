@@ -343,7 +343,7 @@ The package `reconf-spring` provides a class for easy integration with Spring, i
 <dependency>
     <groupId>br.com.uol.reconf</groupId>
     <artifactId>reconf-spring</artifactId>
-    <version>2.1.14</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -461,7 +461,7 @@ The package `reconf-servlet` enables users and/or applications the remote admini
 <dependency>
     <groupId>br.com.uol.reconf</groupId>
     <artifactId>reconf-servlet</artifactId>
-    <version>2.1.14</version>
+    <version>${version}</version>
 </dependency>
 ```
 
@@ -484,7 +484,7 @@ If you are running ReConf inside a web application, just declare the servlet ins
 ```xml
 <servlet>
     <servlet-name>reconf</servlet-name>
-    <servlet-class>org.blocks4j.reconf.servlet.AdminServlet</servlet-class>
+    <servlet-class>reconf.servlet.AdminServlet</servlet-class>
 </servlet>
 <servlet-mapping>
     <servlet-name>reconf</servlet-name>
@@ -494,7 +494,7 @@ If you are running ReConf inside a web application, just declare the servlet ins
 
 ## Integration with Standalone Applications
 
-In a standalone application, there is the need to start an embedded servlet container in order to make the `org.blocks4j.reconf.servlet.AdminServlet` available.
+In a standalone application, there is the need to start an embedded servlet container in order to make the `reconf.servlet.AdminServlet` available.
 
 The snippet below assumes that the family of `org.eclipse.jetty` packages (jetty-server and jetty-servlet) are configured under the dependencies tag of the `pom.xml` file.
 
