@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>ReConf-JVM by blocks4j</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">ReConf-JVM</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/blocks4j/reconf-jvm" class="btn">View on GitHub</a>
+      <a href="https://github.com/blocks4j/reconf-jvm/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/blocks4j/reconf-jvm/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p><a href="https://travis-ci.org/blocks4j/reconf-jvm"><img src="https://travis-ci.org/reconf/reconf-jvm.svg?branch=master" alt="Build Status"></a></p>
+
+<h1>
+<a id="reconf-jvm-in-30-seconds" class="anchor" href="#reconf-jvm-in-30-seconds" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReConf JVM in 30 seconds</h1>
+
+<p>The ReConf JVM Project is a library that provides an easy way to utilize smart configurations in a Java application.</p>
+
+<h2>
+<a id="smart-configurations" class="anchor" href="#smart-configurations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Smart configurations</h2>
+
+<p>A smart configuration is capable of automatically reloading itself from time to time - no need to restart the application. Each configuration item is a key-value pair written in a special - yet simple - format, which allows the library to create the appropriate Java object according to its type.</p>
+
+<h2>
+<a id="just-enough-configuration" class="anchor" href="#just-enough-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Just enough configuration</h2>
+
+<p>ReConf Client relies on a simple and straightforward .properties configuration file, just enough to know a little bit about the execution environment.</p>
+
+<h2>
+<a id="get-rid-of-boilerplate-code" class="anchor" href="#get-rid-of-boilerplate-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get rid of boilerplate code</h2>
+
+<p>Just create a plain old Java interface, decorate it with a few custom annotations, call a factory method and that's it! Your application is good to go.</p>
+
+<h1>
+<a id="reconf-jvm-integration-guide" class="anchor" href="#reconf-jvm-integration-guide" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReConf JVM Integration Guide</h1>
+
+<h2>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table of Contents</h2>
+
+<ul>
+<li><a href="#what-are-the-benefits-of-using-it">What are the benefits of using it?</a></li>
+<li><a href="#and-the-minimum-requirements">And the minimum requirements?</a></li>
+<li>
+<a href="#how-can-i-use-it">How can I use it?</a>
+
+<ul>
+<li><a href="#a-few-concepts-first">A few concepts first</a></li>
+<li><a href="#import-our-maven-dependency">Import our Maven dependency</a></li>
+<li><a href="#configure-your-reconfproperties-file">Configure your reconf.properties file</a></li>
+<li><a href="#create-a-configuration-repository">Create a Configuration Repository</a></li>
+<li><a href="#using-a-configurationrepository">Using a ConfigurationRepository</a></li>
+<li><a href="#native-types-built-automatically">Native types built automatically</a></li>
+</ul>
+</li>
+<li>
+<a href="#advanced-features">Advanced Features</a>
+
+<ul>
+<li><a href="#setting-up-items-with-different-characteristics">Setting up items with different characteristics</a></li>
+<li><a href="#updating-a-configurationrepository-through-code">Updating a ConfigurationRepository through code</a></li>
+<li><a href="#configurationrepository-reuse-through-customizations">ConfigurationRepository reuse through Customizations</a></li>
+<li><a href="#organizing-log-messages">Organizing log messages</a></li>
+<li><a href="#localization-with-reconfproperties">Localization with reconf.properties</a></li>
+<li><a href="#reading-from-different-configuration-file">Reading from a different configuration file</a></li>
+<li><a href="#integrating-with-spring">Integrating with Spring</a></li>
+<li><a href="#using-customizations-with-spring">Using Customizations with Spring</a></li>
+<li><a href="#using-notifications">Events and Listeners</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#servlet">Remote Administration With ReConf Servlet</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+
+<p><a name="what-are-the-benefits-of-using-it"></a></p>
+
+<h2>
+<a id="what-are-the-benefits-of-using-it" class="anchor" href="#what-are-the-benefits-of-using-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>What are the benefits of using it?</h2>
+
+<p>It can provide the following capabilities to a Java application</p>
+
+<ul>
+<li>
+<strong>Automatic update of configuration items</strong> - from time to time the framework retrieves the latest configuration from the configuration server and handles the updated version to the application.</li>
+<li>
+<strong>Atomic configuration retrieval</strong> - if something fails, nothing changes. This way the application remains consistent.</li>
+<li>
+<strong>Local cache of configuration items</strong> - so it doesn't affect your application's resiliency and availability.</li>
+<li>
+<strong>Native creation of Java objects</strong> - no need to manually parse Strings and convert it to objects. The library is able to natively create Lists, Sets, Maps, primitives, Strings, arrays and every class that provides a constructor that takes a String as an argument.</li>
+</ul>
+
+<p><a name="and-the-minimum-requirements"></a></p>
+
+<h2>
+<a id="and-the-minimum-requirements" class="anchor" href="#and-the-minimum-requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>And the minimum requirements?</h2>
+
+<ul>
+<li>Java Runtime Environment 6.</li>
+<li>An instance of ReConf Server (or an Apache Server configured to act as one).</li>
+<li>A few megabytes of local storage for caching purposes (the size of it is directly proportional to the size of your configurations - the bigger they are, the bigger the space it needs).</li>
+</ul>
+
+<p><a name="how-can-i-use-it"></a></p>
+
+<h2>
+<a id="how-can-i-use-it" class="anchor" href="#how-can-i-use-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>How can I use it?</h2>
+
+<p><a name="a-few-concepts-first"></a></p>
+
+<h3>
+<a id="a-few-concepts-first" class="anchor" href="#a-few-concepts-first" aria-hidden="true"><span class="octicon octicon-link"></span></a>A few concepts first</h3>
+
+<p>Two elements form the basis of ReConf: configuration items (<code>@ConfigurationItem</code>) and configuration repositories (<code>@ConfigurationRepository</code>); simply put, one or more items grouped together form a repository. Every configuration item has a <strong>name</strong>, a <strong>component</strong> and a <strong>product</strong>. The latter two attributes can be defined once, in <code>@ConfigurationRepository</code>. Keep with us for more details on how to integrate!</p>
+
+<p><a name="import-our-maven-dependency"></a></p>
+
+<h3>
+<a id="import-our-maven-dependency" class="anchor" href="#import-our-maven-dependency" aria-hidden="true"><span class="octicon octicon-link"></span></a>Import our Maven dependency</h3>
+
+<p>Add these lines to the <code>pom.xml</code> file</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;org.blocks4j.reconf&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;reconf-client&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.0.4&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p><a name="configure-your-reconfproperties-file"></a></p>
+
+<h3>
+<a id="configure-your-reconfproperties-file" class="anchor" href="#configure-your-reconfproperties-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configure your reconf.properties file</h3>
+
+<p>ReConf looks for a file named <strong>reconf.properties</strong> in the classpath. The bare minimum configuration must have two elements, the basic URL where the ReConf server can be found (like <a href="http://reconf.myserver.com">http://reconf.myserver.com</a>) and a directory to store the local cache (for example /export/application/local-cache).</p>
+
+<div class="highlight highlight-ini"><pre><span class="pl-k">local.cache.location</span>=/export/application/local-cache
+<span class="pl-k">server.url</span>=http://reconf.myserver.com</pre></div>
+
+<p>The application must have the necessary permissions to read, write and delete the directory configured in <code>${local.cache.location}</code>.</p>
+
+<p><a name="create-a-configuration-repository"></a></p>
+
+<h3>
+<a id="create-a-configuration-repository" class="anchor" href="#create-a-configuration-repository" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a Configuration Repository</h3>
+
+<p>In order to define a configuration repository, you must create a new Java interface and decorate it with the annotations provided by the reconf-client jar.</p>
+
+<p>The example below provides a very simple configuration repository where each <code>@ConfigurationItem</code> will update itself every 10 minutes.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">import</span> <span class="pl-smi">java.math.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">java.util.concurrent.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.blocks4.reconf.client.annotations.*</span>;
+
+@ConfigurationRepository(product<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>my-product<span class="pl-pds">"</span></span>, component<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>hello-application<span class="pl-pds">"</span></span>,
+    pollingRate<span class="pl-k">=</span><span class="pl-c1">10</span>, pollingTimeUnit<span class="pl-k">=</span><span class="pl-smi">TimeUnit</span><span class="pl-c1"><span class="pl-k">.</span>MINUTES</span>)
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Configuration</span> {
+
+    <span class="pl-k">@ConfigurationItem</span>(<span class="pl-s"><span class="pl-pds">"</span>welcome.text<span class="pl-pds">"</span></span>)
+    <span class="pl-smi">String</span> <span class="pl-en">getText</span>();
+
+    <span class="pl-k">@ConfigurationItem</span>(<span class="pl-s"><span class="pl-pds">"</span>promotional.price<span class="pl-pds">"</span></span>)
+    <span class="pl-smi">BigDecimal</span> <span class="pl-en">getPrice</span>();
+}</pre></div>
+
+<p><a name="using-a-configurationrepository"></a></p>
+
+<h3>
+<a id="using-a-configurationrepository" class="anchor" href="#using-a-configurationrepository" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using a ConfigurationRepository</h3>
+
+<p>Configuration repositories are easily obtained via <code>get</code> method provided by the reconf.client.proxy.ConfigurationRepositoryFactory class. Because creating a proxy is an expensive operation, this operation caches its result; meaning that calling it one or more times will return the same instance when the same arguments are provided.</p>
+
+<div class="highlight highlight-java"><pre>    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> main(<span class="pl-k">String</span>[] args) {
+        <span class="pl-smi">Configuration</span> conf <span class="pl-k">=</span> <span class="pl-smi">ConfigurationRepositoryFactory</span><span class="pl-k">.</span>get(<span class="pl-smi">Configuration</span><span class="pl-k">.</span>class);
+        <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(conf<span class="pl-k">.</span>getText());
+    }</pre></div>
+
+<p><a name="native-types-built-automatically"></a></p>
+
+<h3>
+<a id="native-types-built-automatically" class="anchor" href="#native-types-built-automatically" aria-hidden="true"><span class="octicon octicon-link"></span></a>Native types built automatically</h3>
+
+<p>The library is capable of recognizing and building automatically several types of Java objects, including the interfaces from the java.util package. You can find the details below. To take full advantage of this feature, it is necessary to use the ReConf format to declare the value of your configurations.</p>
+
+<p>There are two kinds of configurations: the ones that are mapped to a single object (delimited by single quotes <code>' '</code>) and sets of single objects (delimited by square brackets <code>[ ]</code>).</p>
+
+<h4>
+<a id="declaring-simple-objects" class="anchor" href="#declaring-simple-objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Declaring simple objects</h4>
+
+<p>Simple objects can be built by the tool as long as they are either primitives (or wrappers) or provide a public constructor that takes one java.lang.String as argument. The table below shows a few examples.</p>
+
+<table>
+<thead>
+<tr>
+<th>returning type</th>
+<th>configuration value</th>
+<th>resulting object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>j.l.String</code></td>
+<td>'\n'</td>
+<td>"\n" (a j.l.String containing the new line symbol)</td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td>'tRuE'</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>j.l.Boolean</code></td>
+<td>'false'</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>'a'</td>
+<td>'a'</td>
+</tr>
+<tr>
+<td><code>j.l.Character</code></td>
+<td>'\t'</td>
+<td>'\t' (a j.l.Character containing the tab symbol)</td>
+</tr>
+<tr>
+<td><code>j.l.Character</code></td>
+<td>'ab'</td>
+<td>error!</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>'1.2'</td>
+<td>1.2</td>
+</tr>
+<tr>
+<td><code>j.m.BigDecimal</code></td>
+<td>'1'</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>'10'</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>j.l = java.lang; j.m = java.math</p>
+</blockquote>
+
+<h4>
+<a id="declaring-arrays-of-objects" class="anchor" href="#declaring-arrays-of-objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Declaring arrays of objects</h4>
+
+<p>An array fits the "a collection of single objects" definition and so it must be declared inside square brackets. The table below shows a few examples.</p>
+
+<table>
+<thead>
+<tr>
+<th>returning type</th>
+<th>configuration value</th>
+<th>resulting object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>j.l.String</code></td>
+<td>'my simple String'</td>
+<td>"my simple String"</td>
+</tr>
+<tr>
+<td><code>j.l.String[ ]</code></td>
+<td>[ 'a', ' b', 'c' ]</td>
+<td>[ "a", " b", "c" ]</td>
+</tr>
+<tr>
+<td><code>j.l.String[ ]</code></td>
+<td>[ ]</td>
+<td>zero-sized String array</td>
+</tr>
+<tr>
+<td><code>j.l.String[ ]</code></td>
+<td>" "</td>
+<td>error! (no single quotes)</td>
+</tr>
+<tr>
+<td><code>boolean[ ]</code></td>
+<td>[ 'true','false' ]</td>
+<td>[ true, false ]</td>
+</tr>
+<tr>
+<td><code>int[ ]</code></td>
+<td>[ '1' , '2' ]</td>
+<td>[ 1, 2 ]</td>
+</tr>
+<tr>
+<td><code>j.m.BigDecimal[ ]</code></td>
+<td>[ '1', '10' ]</td>
+<td>[ 1, 10 ]</td>
+</tr>
+<tr>
+<td><code>char[ ]</code></td>
+<td>[ 'a', '\n' ]</td>
+<td>[ 'a', '\n' ]</td>
+</tr>
+<tr>
+<td><code>float[ ]</code></td>
+<td>[ '-1.01' ]</td>
+<td>[ -1.01 ]</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>j.l = java.lang; j.m = java.math</p>
+</blockquote>
+
+<h4>
+<a id="before-we-dive-into-collections-of-objects" class="anchor" href="#before-we-dive-into-collections-of-objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Before we dive into Collections of objects</h4>
+
+<p>To group objects inside a Collection, there is no need to declare the returning type as a concrete implementation (like java.util.ArrayList or java.util.HashSet). The library is shipped with pre-selected implementations according to the type and, if you don't want to use the implementation we chose, simply use the class of choice as the returning type.</p>
+
+<table>
+<thead>
+<tr>
+<th>returning type</th>
+<th>default implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>j.u.Collection</code></td>
+<td><code>j.u.ArrayList</code></td>
+</tr>
+<tr>
+<td><code>j.u.List</code></td>
+<td><code>j.u.ArrayList</code></td>
+</tr>
+<tr>
+<td><code>j.u.Set</code></td>
+<td><code>j.u.HashSet</code></td>
+</tr>
+<tr>
+<td><code>j.u.SortedSet</code></td>
+<td><code>j.u.TreeSet</code></td>
+</tr>
+<tr>
+<td><code>j.u.NavigableSet</code></td>
+<td><code>j.u.TreeSet</code></td>
+</tr>
+<tr>
+<td><code>j.u.Queue</code></td>
+<td><code>j.u.LinkedList</code></td>
+</tr>
+<tr>
+<td><code>j.u.concurrent.BlockingQueue</code></td>
+<td><code>j.u.concurrent.ArrayBlockingQueue</code></td>
+</tr>
+<tr>
+<td><code>j.u.concurrent.BlockingDeque</code></td>
+<td><code>j.u.concurrent.LinkedBlockingDeque</code></td>
+</tr>
+<tr>
+<td><code>j.u.Map</code></td>
+<td><code>j.u.HashMap</code></td>
+</tr>
+<tr>
+<td><code>j.u.concurrent.ConcurrentMap</code></td>
+<td><code>j.u.concurrent.ConcurrentHashMap</code></td>
+</tr>
+<tr>
+<td><code>j.u.concurrent.ConcurrentNavigableMap</code></td>
+<td><code>j.u.concurrent.ConcurrentSkipListMap</code></td>
+</tr>
+<tr>
+<td><code>j.u.NavigableMap</code></td>
+<td><code>j.u.TreeMap</code></td>
+</tr>
+<tr>
+<td><code>j.u.SortedMap</code></td>
+<td><code>j.u.TreeMap</code></td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>j.u = java.util</p>
+</blockquote>
+
+<h4>
+<a id="building-collections-of-objects" class="anchor" href="#building-collections-of-objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building Collections of objects</h4>
+
+<p>Collections of objects must be delimited by square brackets. The table below shows a few examples.</p>
+
+<table>
+<thead>
+<tr>
+<th>returning type</th>
+<th>configuration value</th>
+<th>resulting collection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>j.u.Collection&lt;j.l.String&gt;</code></td>
+<td>[ 'a', 'b', 'c' ]</td>
+<td>"a", "b", "c"</td>
+</tr>
+<tr>
+<td><code>j.u.Collection&lt;j.l.String&gt;</code></td>
+<td>[ ]</td>
+<td>empty</td>
+</tr>
+<tr>
+<td><code>j.u.Collection&lt;j.u.Collection&lt;j.l.String&gt;&gt;</code></td>
+<td>[ [ ] ]</td>
+<td>an empty collection containing an empty collection</td>
+</tr>
+<tr>
+<td><code>j.u.Collection&lt;j.u.Collection&lt; j.l.String&gt;&gt;</code></td>
+<td>[ [ 'a' ], [ 'b' ] ]</td>
+<td>a collection containing two collections, one with "a" and the other with "b"</td>
+</tr>
+<tr>
+<td><code>j.u.Collection&lt;j.l.String&gt;</code></td>
+<td>' '</td>
+<td>error! (no square brackets)</td>
+</tr>
+<tr>
+<td><code>j.u.Collection&lt;j.l.Boolean&gt;</code></td>
+<td>[ 'true', 'false' ]</td>
+<td>true, false</td>
+</tr>
+<tr>
+<td><code>j.u.Collection&lt;j.m.BigDecimal&gt;</code></td>
+<td>[ '1', '10' ]</td>
+<td>1, 10</td>
+</tr>
+<tr>
+<td><code>j.u.Collection&lt;j.l.Character&gt;</code></td>
+<td>[ 'a', 'b' ]</td>
+<td>'a', 'b'</td>
+</tr>
+<tr>
+<td><code>j.u.Collection&lt;j.l.Float&gt;</code></td>
+<td>[ '-1', '1.01' ]</td>
+<td>-1, 1.01</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>j.l = java.lang; j.m = java.math; j.u = java.util</p>
+</blockquote>
+
+<h4>
+<a id="building-maps" class="anchor" href="#building-maps" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building Maps</h4>
+
+<p>A Map is different from a Collection because it contains pairs of tuples of the form Key-Value, whereas a Collection is a container of objects with no relation among themselves. For this reason, the formatting part is different, but not that much, since a Map is a complex type. Just separate a key from its value by using a colon <code>:</code> and a pair of key-values from each other using a comma <code>,</code>.</p>
+
+<table>
+<thead>
+<tr>
+<th>returning type</th>
+<th>configuration value</th>
+<th>resulting map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>j.u.Map&lt;j.l.String,j.l.Character&gt;</code></td>
+<td>[ 'a':'b' , 'c':'d' ]</td>
+<td>{ "a" = 'b', "c" = 'd' }</td>
+</tr>
+<tr>
+<td><code>j.u.Map&lt;j.l.Object,j.l.Object&gt;</code></td>
+<td>[ ]</td>
+<td>empty</td>
+</tr>
+<tr>
+<td><code>j.u.Map&lt;j.l.String,j.u.List&lt;j.l.Object&gt;&gt;</code></td>
+<td>[ 'k' : [ ] ]</td>
+<td>{ "k" = [ ] } (the key "k" maps to an empty collection)</td>
+</tr>
+<tr>
+<td><code>j.u.Map&lt;j.l.String,j.u.List&lt;j.l.Integer&gt;&gt;</code></td>
+<td>[ 'k' : [ '1','2' ] ]</td>
+<td>{ "k" = [ 1,2 ] }</td>
+</tr>
+<tr>
+<td><code>j.u.Map&lt;j.l.Object,j.l.Object&gt;</code></td>
+<td>' '</td>
+<td>error! (no square brackets)</td>
+</tr>
+<tr>
+<td><code>j.u.Map&lt;j.l.String,j.l.String&gt;</code></td>
+<td>[ 'x' ]</td>
+<td>error! (a key must map to a value)</td>
+</tr>
+<tr>
+<td><code>j.u.Map&lt;j.l.String,j.l.String&gt;</code></td>
+<td>[ 'x' : 1 ]</td>
+<td>error! (no single quotes enclosing 1)</td>
+</tr>
+<tr>
+<td><code>j.u.Map&lt;j.l.String,j.l.Boolean&gt;</code></td>
+<td>[ 'true' : 'false' ]</td>
+<td>{ "true" = false }</td>
+</tr>
+<tr>
+<td><code>j.u.Map&lt;j.l.Integer,j.l.Integer&gt;</code></td>
+<td>[ '1' : '2' ]</td>
+<td>{ 1 = 2 }</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>j.l = java.lang; j.u = java.util</p>
+</blockquote>
+
+<p><a name="advanced-features"></a></p>
+
+<h2>
+<a id="advanced-features" class="anchor" href="#advanced-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Advanced Features</h2>
+
+<p><a name="setting-up-items-with-different-characteristics"></a></p>
+
+<h3>
+<a id="setting-up-items-with-different-characteristics" class="anchor" href="#setting-up-items-with-different-characteristics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setting up items with different characteristics</h3>
+
+<p>It is possible to specialize an item, setting it up with characteristics that deviate from the ones configured in the <code>@ConfigurationRepository</code> annotation. The library operates using a simple rule: when inspecting an item, if nothing is found, the item will inherit the attributes defined in the interface. Otherwise, just the particular difference found will be applied.</p>
+
+<h4>
+<a id="reading-the-configuration-from-another-component-andor-product" class="anchor" href="#reading-the-configuration-from-another-component-andor-product" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reading the configuration from another component and/or product</h4>
+
+<p>In the example below, "currency.code" belongs to another component, named "goodbye-component". The fourth item, "minimum.age" is part of the "general-configuration" component, which belongs to "all-products" product. The other two items, "promotional.price", and "welcome.text" belong to "hello-application" which is under "my-product". Finally, all items will update on a ten-second basis.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">import</span> <span class="pl-smi">java.math.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">java.util.concurrent.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.blocks4.reconf.client.annotations.*</span>;
+
+@ConfigurationRepository(product<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>my-product<span class="pl-pds">"</span></span>, component<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>hello-application<span class="pl-pds">"</span></span>,
+    pollingRate<span class="pl-k">=</span><span class="pl-c1">10</span>, pollingTimeUnit<span class="pl-k">=</span><span class="pl-smi">TimeUnit</span><span class="pl-c1"><span class="pl-k">.</span>MINUTES</span>)
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Configuration</span> {
+
+    <span class="pl-k">@ConfigurationItem</span>(<span class="pl-s"><span class="pl-pds">"</span>welcome.text<span class="pl-pds">"</span></span>)
+    <span class="pl-smi">String</span> <span class="pl-en">getText</span>();
+
+    <span class="pl-k">@ConfigurationItem</span>(<span class="pl-s"><span class="pl-pds">"</span>promotional.price<span class="pl-pds">"</span></span>)
+    <span class="pl-smi">BigDecimal</span> <span class="pl-en">getPrice</span>();
+
+    <span class="pl-k">@ConfigurationItem</span>(<span class="pl-c1">value</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>currency.code<span class="pl-pds">"</span></span>, <span class="pl-c1">component</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>goodbye-application<span class="pl-pds">"</span></span>)
+    <span class="pl-smi">String</span> <span class="pl-en">getCurrencyCode</span>();
+
+    <span class="pl-k">@ConfigurationItem</span>(<span class="pl-c1">value</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>minimum.age<span class="pl-pds">"</span></span>, <span class="pl-c1">component</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>general-configuration<span class="pl-pds">"</span></span>,
+        <span class="pl-c1">product</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>all-products<span class="pl-pds">"</span></span>)
+    <span class="pl-k">int</span> <span class="pl-en">getMinimumAge</span>();
+}</pre></div>
+
+<p><a name="updating-a-configurationrepository-through-code"></a></p>
+
+<h3>
+<a id="updating-a-configurationrepository-through-code" class="anchor" href="#updating-a-configurationrepository-through-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Updating a ConfigurationRepository through code</h3>
+
+<p>There's a way to force an update operation of every <code>@ConfigurationItem</code> of a <code>@ConfigurationRepository</code>, regardless the update frequency parameters (rate and timeUnit). To enable it, add a <strong>void</strong> method to the interface and annotate it with <code>@UpdateConfigurationRepository</code>. When called, the method will block until all update operations have returned. In case everything goes ok, the local cache is updated; otherwise a runtime <code>UpdateConfigurationRepositoryException</code> is thrown to notify the application that a problem has occurred.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">package</span> <span class="pl-smi">examples</span>;
+
+<span class="pl-k">import</span> <span class="pl-smi">java.util.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">java.util.concurrent.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.blocks4.reconf.client.annotations.*</span>;
+
+@ConfigurationRepository(product<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>my-product<span class="pl-pds">"</span></span>, component<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>hello-application<span class="pl-pds">"</span></span>,
+    pollingRate<span class="pl-k">=</span><span class="pl-c1">1</span>, pollingTimeUnit<span class="pl-k">=</span><span class="pl-smi">TimeUnit</span><span class="pl-c1"><span class="pl-k">.</span>HOURS</span>)
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Configuration</span> {
+
+    <span class="pl-k">@ConfigurationItem</span>(<span class="pl-s"><span class="pl-pds">"</span>welcome.text<span class="pl-pds">"</span></span>)
+    <span class="pl-smi">String</span> <span class="pl-en">getText</span>();
+
+    <span class="pl-k">@UpdateConfigurationRepository</span>
+    <span class="pl-k">void</span> <span class="pl-en">updateIt</span>();
+}</pre></div>
+
+<p><a name="configurationrepository-reuse-through-customizations"></a></p>
+
+<h3>
+<a id="configurationrepository-reuse-through-customizations" class="anchor" href="#configurationrepository-reuse-through-customizations" aria-hidden="true"><span class="octicon octicon-link"></span></a>ConfigurationRepository reuse through Customizations</h3>
+
+<p>Customizations are a feature that allows the developer to solve the following problem: "Can I create two instances of the same ConfigurationRepository containing different configuration values?". In order to do that, we introduce the concept of Customizations. This feature provides a way to slightly change a configuration repository by adding prefixes and/or suffixes for components and/or configuration item names.</p>
+
+<div class="highlight highlight-java"><pre>    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> main(<span class="pl-k">String</span>[] args) {
+        <span class="pl-smi">Customization</span> cust <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Customization</span>();
+        cust<span class="pl-k">.</span>setComponentPrefix(<span class="pl-s"><span class="pl-pds">"</span>cp-<span class="pl-pds">"</span></span>);
+        cust<span class="pl-k">.</span>setComponentSuffix(<span class="pl-s"><span class="pl-pds">"</span>-cs<span class="pl-pds">"</span></span>);
+        cust<span class="pl-k">.</span>setComponentItemPrefix(<span class="pl-s"><span class="pl-pds">"</span>kp-<span class="pl-pds">"</span></span>);
+        cust<span class="pl-k">.</span>setComponentItemSuffix(<span class="pl-s"><span class="pl-pds">"</span>-ks<span class="pl-pds">"</span></span>);
+
+        <span class="pl-smi">Configuration</span> conf <span class="pl-k">=</span> <span class="pl-smi">ConfigurationRepositoryFactory</span><span class="pl-k">.</span>get(<span class="pl-smi">Configuration</span><span class="pl-k">.</span>class);
+
+        <span class="pl-smi">Configuration</span> customConf <span class="pl-k">=</span> <span class="pl-smi">ConfigurationRepositoryFactory</span><span class="pl-k">.</span>get(<span class="pl-smi">Configuration</span><span class="pl-k">.</span>class, cust);
+        <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(conf<span class="pl-k">.</span>getText() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>, <span class="pl-pds">"</span></span> <span class="pl-k">+</span> customConf<span class="pl-k">.</span>getText());
+    }</pre></div>
+
+<p>The example above creates two repositories, both from the same interface. The "conf" repository will behave just as expected, retrieving the configuration from "my-product/hello-application/welcome.text" hierarchy. The second instance though, named "customConf", will retrieve the configuration from "my-product/cp-hello-application-cs/kp-welcome.text-ks" hierarchy.</p>
+
+<p><a name="organizing-log-messages"></a></p>
+
+<h3>
+<a id="organizing-log-messages" class="anchor" href="#organizing-log-messages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Organizing log messages</h3>
+
+<p>If you use slf4j (if you don't there are <a href="http://logback.qos.ch/reasonsToSwitch.html">a lot of reasons</a> to do it), you can declare a new logger and append it to the appender of your preference. The example sets the level to DEBUG but I don't recommend doing it in production environment since it's very verbose. The INFO level will do just fine.</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">logger</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>ReConf<span class="pl-pds">"</span></span> <span class="pl-e">additivity</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span> <span class="pl-e">level</span>=<span class="pl-s"><span class="pl-pds">"</span>DEBUG<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">appender-ref</span> <span class="pl-e">ref</span>=<span class="pl-s"><span class="pl-pds">"</span>A1<span class="pl-pds">"</span></span> /&gt;
+&lt;/<span class="pl-ent">logger</span>&gt;</pre></div>
+
+<p><a name="localization-with-reconfproperties"></a></p>
+
+<h3>
+<a id="localization-with-reconfproperties" class="anchor" href="#localization-with-reconfproperties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Localization with reconf.properties</h3>
+
+<p>To activate localized log messages, add a property named <code>locale</code> in the reconf.properties file. The locale must comply with the <a href="http://www.oracle.com/technetwork/java/javase/locales-137662.html">JDK 6 and JRE 6 Supported Locales</a>. Besides the default locale (en_US) the library also provides an additional one, Portuguese Brazil (pt_BR).</p>
+
+<div class="highlight highlight-ini"><pre><span class="pl-k">locale</span>=pt_BR
+<span class="pl-k">local.cache.location</span>=/export/application/local-cache
+<span class="pl-k">server.url</span>=http://reconf.myserver.com</pre></div>
+
+<p><a name="reading-from-different-configuration-file"></a></p>
+
+<h3>
+<a id="reading-from-a-different-configuration-file" class="anchor" href="#reading-from-a-different-configuration-file" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reading from a different configuration file</h3>
+
+<p>To read a different configuration file, start the application with <code>-Dreconf.client.file.location=/path/to/a/different/file.properties</code>. The library will try to read from this location before looking for a reconf.properties file in the classpath.</p>
+
+<p><a name="integrating-with-spring"></a></p>
+
+<h3>
+<a id="integrating-with-spring" class="anchor" href="#integrating-with-spring" aria-hidden="true"><span class="octicon octicon-link"></span></a>Integrating with Spring</h3>
+
+<p>The package <code>reconf-spring</code> provides a class for easy integration with Spring, including the use of <code>@Autowired</code> annotation. Add the following dependency to the <code>pom.xml</code> file.</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;br.com.uol.reconf&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;reconf-spring&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.0.4&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p>For every configuration repository, declare a bean of class "reconf.spring.RepositoryConfigurationBean" with a "configInterface" attribute configured with the interface containing the <code>@ConfigurationRepository</code> annotation.</p>
+
+<p>Assuming that we are using the interface below.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">package</span> <span class="pl-smi">example</span>;
+
+<span class="pl-k">import</span> <span class="pl-smi">java.util.concurrent.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.blocks4.reconf.client.annotations.*</span>;
+
+@ConfigurationRepository(product<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>my-product<span class="pl-pds">"</span></span>, component<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>hello-application<span class="pl-pds">"</span></span>,
+    pollingRate<span class="pl-k">=</span><span class="pl-c1">10</span>, pollingTimeUnit<span class="pl-k">=</span><span class="pl-smi">TimeUnit</span><span class="pl-c1"><span class="pl-k">.</span>MINUTES</span>)
+<span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Configuration</span> {
+
+    <span class="pl-k">@ConfigurationItem</span>(<span class="pl-s"><span class="pl-pds">"</span>welcome.text<span class="pl-pds">"</span></span>)
+    <span class="pl-smi">String</span> <span class="pl-en">getText</span>();
+}</pre></div>
+
+<p>The xml should look like this.</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">bean</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>example.Configuration<span class="pl-pds">"</span></span> /&gt;
+&lt;/<span class="pl-ent">bean</span>&gt;</pre></div>
+
+<p><a name="using-customizations-with-spring"></a></p>
+
+<h3>
+<a id="using-customizations-with-spring" class="anchor" href="#using-customizations-with-spring" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Customizations with Spring</h3>
+
+<p>The xml excerpt below creates two beans, a regular "conf" and a custom "customConf" detailed in <a href="#configurationrepository-reuse-through-customizations">ConfigurationRepository reuse through Customizations</a>.</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>customConf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>example.Configuration<span class="pl-pds">"</span></span>/&gt;
+    &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>componentPrefix<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>cp-<span class="pl-pds">"</span></span>/&gt;
+    &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>componentSuffix<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>-cs<span class="pl-pds">"</span></span>/&gt;
+    &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>componentItemPrefix<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>kp-<span class="pl-pds">"</span></span>/&gt;
+    &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>componentItemSuffix<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>-ks<span class="pl-pds">"</span></span>/&gt;
+&lt;/<span class="pl-ent">bean</span>&gt;
+
+&lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>conf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>example.Configuration<span class="pl-pds">"</span></span>/&gt;
+&lt;/<span class="pl-ent">bean</span>&gt;</pre></div>
+
+<p><a name="using-notifications"></a></p>
+
+<h3>
+<a id="events-and-listeners" class="anchor" href="#events-and-listeners" aria-hidden="true"><span class="octicon octicon-link"></span></a>Events and Listeners</h3>
+
+<p>The API fires notifications for certain kinds of events. The current version is capable of notifying clients of two significative events related to the <code>@ConfigurationItem</code> lifecycle: (1) the property is successfully updated; (2) the client is not able to build an object from the obtained value.</p>
+
+<p>To listen to such events, the application developer must provide an implementation of the <code>reconf.client.notification.ConfigurationItemListener</code> interface. There are two possible ways to register the listener. One is by adding it directly into the <a href="#configurationrepository-reuse-through-customizations">Customization</a> object (example 1). The other is during the beanwiring set up on Spring (example 2).</p>
+
+<div class="highlight highlight-java"><pre>    <span class="pl-c">// example 1</span>
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> main(<span class="pl-k">String</span>[] args) throws <span class="pl-smi">Exception</span> {
+        <span class="pl-smi">Customization</span> custom <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Customization</span>();
+        custom<span class="pl-k">.</span>addConfigurationItemListener(<span class="pl-k">new</span> <span class="pl-smi">ConfigurationItemListener</span>() {
+
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onEvent</span>(<span class="pl-smi">UpdateNotification</span> <span class="pl-v">event</span>) {
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(<span class="pl-s"><span class="pl-pds">"</span>updated value [<span class="pl-pds">"</span></span> <span class="pl-k">+</span> event<span class="pl-k">.</span>getRawValue() <span class="pl-k">+</span>
+                    <span class="pl-s"><span class="pl-pds">"</span>] read from [<span class="pl-pds">"</span></span> <span class="pl-k">+</span> event<span class="pl-k">.</span>getSource() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>]<span class="pl-pds">"</span></span>);
+            }
+
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onEvent</span>(<span class="pl-smi">ErrorNotification</span> <span class="pl-v">event</span>) {
+                <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(<span class="pl-s"><span class="pl-pds">"</span>error while updating a property. obtained value [<span class="pl-pds">"</span></span> <span class="pl-k">+</span>
+                    event<span class="pl-k">.</span>getRawValue() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>] read from [<span class="pl-pds">"</span></span> <span class="pl-k">+</span> event<span class="pl-k">.</span>getSource() <span class="pl-k">+</span>
+                    <span class="pl-s"><span class="pl-pds">"</span>] exception [<span class="pl-pds">"</span></span> <span class="pl-k">+</span> event<span class="pl-k">.</span>getError() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>]<span class="pl-pds">"</span></span>);
+            }
+        });
+        <span class="pl-smi">Configuration</span> conf <span class="pl-k">=</span> <span class="pl-smi">ConfigurationRepositoryFactory</span><span class="pl-k">.</span>get(<span class="pl-smi">Configuration</span><span class="pl-k">.</span>class, custom);
+        <span class="pl-smi">System</span><span class="pl-k">.</span>out<span class="pl-k">.</span>println(conf<span class="pl-k">.</span>getText());
+    }</pre></div>
+
+<div class="highlight highlight-xml"><pre>    <span class="pl-c">&lt;!-- example 2 --&gt;</span>
+    &lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>conf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.driver.Configuration<span class="pl-pds">"</span></span>/&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configurationItemListeners<span class="pl-pds">"</span></span>&gt;
+            &lt;<span class="pl-ent">util</span><span class="pl-ent">:</span><span class="pl-ent">list</span>&gt;
+                &lt;<span class="pl-ent">bean</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.driver.MyListener<span class="pl-pds">"</span></span>/&gt;
+            &lt;/<span class="pl-ent">util</span><span class="pl-ent">:</span><span class="pl-ent">list</span>&gt;
+        &lt;/<span class="pl-ent">property</span>&gt;
+    &lt;/<span class="pl-ent">bean</span>&gt;</pre></div>
+
+<p>The basic attributes shared by both Notification events are:</p>
+
+<ul>
+<li>
+<code>java.lang.String</code> product</li>
+<li>
+<code>java.lang.String</code> component</li>
+<li>
+<code>java.lang.String</code> item</li>
+<li>
+<code>java.lang.reflect.Method</code> method</li>
+<li>
+<code>java.lang.Class</code> cast</li>
+<li>
+<code>java.lang.String</code> rawValue</li>
+<li>
+<code>reconf.client.config.update.ConfigurationItemUpdateResult.Source</code> source</li>
+</ul>
+
+<p>The <code>ErrorNotification</code> class has an additional <code>java.lang.Throwable</code> throwable field, whilst the <code>UpdateNotification</code> class has a <code>java.lang.Object</code> newValue field containing the newly created object.</p>
+
+<p><a name="troubleshooting"></a></p>
+
+<h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<ol>
+<li>Check for error and warn messages logged by the framework.</li>
+<li>Check for "strange" characters in your configuration item values, such as tabs and spaces, before and after enclosing characters (<code>''</code> and <code>[]</code>).</li>
+<li>Try to delete everything inside the local-cache directory defined in the reconf.xml file.</li>
+<li>Enable DEBUG logging and look for strange messages.</li>
+</ol>
+
+<p><a name="servlet"></a></p>
+
+<h1>
+<a id="remote-administration-with-reconf-servlet" class="anchor" href="#remote-administration-with-reconf-servlet" aria-hidden="true"><span class="octicon octicon-link"></span></a>Remote Administration With ReConf Servlet</h1>
+
+<p>The package <code>reconf-servlet</code> enables users and/or applications the remote administration of certain aspects of the framework via an HTTP API. Add the following dependency to the <code>pom.xml</code> file.</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;br.com.uol.reconf&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;reconf-servlet&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.0.4&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p>For now, the only functionality available is "sync", which results in immediate reload of every <code>@ConfigurationRepository</code> active. Internally, the framework queries the current value of all <code>@ConfigurationItem</code> in the reconf-server. If one of them fails, the sync is cancelled and a rollback is made. The rollback only applies to the specific <code>@ConfigurationRepository</code> that failed. Overall result is returned as a JSON, with distinct "success" fields for every repository.</p>
+
+<p>To use it, map the <code>reconf.servlet.AdminServlet</code> and fire an HTTP GET request.</p>
+
+<div class="highlight highlight-sh"><pre><span class="pl-c"># displays the option menu</span>
+curl -G -v localhost:8080/reconf
+
+<span class="pl-c"># calls the sync functionality</span>
+curl -G -v localhost:8080/reconf/sync</pre></div>
+
+<h2>
+<a id="integration-with-web-applications" class="anchor" href="#integration-with-web-applications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Integration with Web Applications</h2>
+
+<p>If you are running ReConf inside a web application, just declare the servlet inside <code>WEB-INF/web.xml</code> file and choose a mapping pattern to access it, like the example below.</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">servlet</span>&gt;
+    &lt;<span class="pl-ent">servlet-name</span>&gt;reconf&lt;/<span class="pl-ent">servlet-name</span>&gt;
+    &lt;<span class="pl-ent">servlet-class</span>&gt;reconf.servlet.AdminServlet&lt;/<span class="pl-ent">servlet-class</span>&gt;
+&lt;/<span class="pl-ent">servlet</span>&gt;
+&lt;<span class="pl-ent">servlet-mapping</span>&gt;
+    &lt;<span class="pl-ent">servlet-name</span>&gt;reconf&lt;/<span class="pl-ent">servlet-name</span>&gt;
+    &lt;<span class="pl-ent">url-pattern</span>&gt;/reconf/*&lt;/<span class="pl-ent">url-pattern</span>&gt;
+&lt;/<span class="pl-ent">servlet-mapping</span>&gt;</pre></div>
+
+<h2>
+<a id="integration-with-standalone-applications" class="anchor" href="#integration-with-standalone-applications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Integration with Standalone Applications</h2>
+
+<p>In a standalone application, there is the need to start an embedded servlet container in order to make the <code>reconf.servlet.AdminServlet</code> available.</p>
+
+<p>The snippet below assumes that the family of <code>org.eclipse.jetty</code> packages (jetty-server and jetty-servlet) are configured under the dependencies tag of the <code>pom.xml</code> file.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">import</span> <span class="pl-smi">org.eclipse.jetty.server.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.eclipse.jetty.servlet.*</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.blocks4.reconf.servlet.*</span>;
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">ReconfServlet</span> {
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) <span class="pl-k">throws</span> <span class="pl-smi">Exception</span> {
+        <span class="pl-smi">Server</span> server <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Server</span>(<span class="pl-c1">8080</span>);
+        <span class="pl-smi">ServletContextHandler</span> handler <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">ServletContextHandler</span>();
+        handler<span class="pl-k">.</span>setContextPath(<span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>);
+        handler<span class="pl-k">.</span>addServlet(<span class="pl-smi">AdminServlet</span><span class="pl-k">.</span>class, <span class="pl-s"><span class="pl-pds">"</span>/reconf/*<span class="pl-pds">"</span></span>);
+        server<span class="pl-k">.</span>setHandler(handler);
+        server<span class="pl-k">.</span>start();
+    }
+}</pre></div>
+
+<p><a name="license"></a></p>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p>Copyright 2013-2015 Blocks4J Team (<a href="http://www.blocks4j.org">www.blocks4j.org</a>)</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/blocks4j/reconf-jvm">ReConf-JVM</a> is maintained by <a href="https://github.com/blocks4j">blocks4j</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
