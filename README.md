@@ -1,9 +1,8 @@
-[![Build Status](https://travis-ci.org/reconf/reconf-jvm.svg?branch=master)](https://travis-ci.org/blocks4j/reconf-jvm)
-
 <p align="center">
   <img src="https://en.gravatar.com/userimage/49424839/954dc63a98d97c92e56d23bb98eed1e0.png?size=200"/>
 </p>
 
+[![Build Status](https://travis-ci.org/reconf/reconf-jvm.svg?branch=master)](https://travis-ci.org/blocks4j/reconf-jvm)
 # ReConf JVM in 30 seconds
 
 The ReConf JVM Project is a library that provides an easy way to utilize smart configurations in a Java application.
