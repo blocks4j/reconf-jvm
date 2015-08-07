@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://en.gravatar.com/userimage/49424839/954dc63a98d97c92e56d23bb98eed1e0.png?size=200"/>
+  <img src="https://github.com/blocks4j/reconf-jvm/blob/master/other/images/reconf.png"/>
 </p>
 
 [![Build Status](https://travis-ci.org/reconf/reconf-jvm.svg?branch=master)](https://travis-ci.org/blocks4j/reconf-jvm)
