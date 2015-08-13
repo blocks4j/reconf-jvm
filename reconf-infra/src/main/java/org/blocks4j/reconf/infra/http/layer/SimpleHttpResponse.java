@@ -43,10 +43,13 @@ public class SimpleHttpResponse {
     private Exception exception;
 
     SimpleHttpResponse(CloseableHttpClient httpClient, HttpUriRequest request) throws ClientProtocolException, IOException {
-        this.httpClient = httpClient;
-        this.response = httpClient.execute(request);
-        consumeResponse();
-        finalizeResponse();
+        try {
+            this.httpClient = httpClient;
+            this.response = httpClient.execute(request);
+            consumeResponse();
+        } finally {
+            finalizeResponse();
+        }
     }
 
     private void consumeResponse() {

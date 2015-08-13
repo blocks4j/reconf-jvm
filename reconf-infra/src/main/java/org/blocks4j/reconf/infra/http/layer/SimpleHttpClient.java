@@ -35,7 +35,7 @@ public class SimpleHttpClient {
 
     private static final MessagesBundle msg = MessagesBundle.getBundle(SimpleHttpClient.class);
 
-    private static ExecutorService requestExecutor = Executors.newFixedThreadPool(10, new ThreadFactory() {
+    private static ExecutorService requestExecutor = Executors.newFixedThreadPool(20, new ThreadFactory() {
         private final AtomicInteger counter = new AtomicInteger();
         @Override
         public Thread newThread(Runnable r) {
