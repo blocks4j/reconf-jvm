@@ -19,11 +19,11 @@
     </section>
 
     <section class="main-content">
-      <p><a href="https://travis-ci.org/blocks4j/reconf-jvm"><img src="https://travis-ci.org/reconf/reconf-jvm.svg?branch=master" alt="Build Status"></a></p>
-
-<p align="center">
-  <img src="https://en.gravatar.com/userimage/49424839/954dc63a98d97c92e56d23bb98eed1e0.png?size=200">
+      <p align="center">
+  <img src="https://raw.githubusercontent.com/blocks4j/reconf-jvm/master/other/images/reconf.png">
 </p>
+
+<p><a href="https://travis-ci.org/blocks4j/reconf-jvm"><img src="https://travis-ci.org/reconf/reconf-jvm.svg?branch=master" alt="Build Status"></a></p>
 
 <h1>
 <a id="reconf-jvm-in-30-seconds" class="anchor" href="#reconf-jvm-in-30-seconds" aria-hidden="true"><span class="octicon octicon-link"></span></a>ReConf JVM in 30 seconds</h1>
@@ -137,7 +137,7 @@
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;org.blocks4j.reconf&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;reconf-client&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;3.0.4&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.0.5&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p><a name="configure-your-reconfproperties-file"></a></p>
@@ -657,7 +657,7 @@
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;br.com.uol.reconf&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;reconf-spring&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;3.0.4&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.0.5&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>For every configuration repository, declare a bean of class "reconf.spring.RepositoryConfigurationBean" with a "configInterface" attribute configured with the interface containing the <code>@ConfigurationRepository</code> annotation.</p>
@@ -784,7 +784,7 @@
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
     &lt;<span class="pl-ent">groupId</span>&gt;br.com.uol.reconf&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;reconf-servlet&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;3.0.4&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;3.0.5&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>For now, the only functionality available is "sync", which results in immediate reload of every <code>@ConfigurationRepository</code> active. Internally, the framework queries the current value of all <code>@ConfigurationItem</code> in the reconf-server. If one of them fails, the sync is cancelled and a rollback is made. The rollback only applies to the specific <code>@ConfigurationRepository</code> that failed. Overall result is returned as a JSON, with distinct "success" fields for every repository.</p>
