@@ -426,7 +426,7 @@ To listen to such events, the application developer must provide an implementati
 
 ```xml
     <!-- example 2 -->
-    <bean id="conf" class="reconf.spring.RepositoryConfigurationBean">
+    <bean id="conf" class="org.blocks4j.reconf.spring.RepositoryConfigurationBean">
         <property name="configInterface" value="reconf.driver.Configuration"/>
         <property name="configurationItemListeners">
             <util:list>
