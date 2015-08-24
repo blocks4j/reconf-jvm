@@ -8,7 +8,7 @@
 The ReConf JVM Project is a library that provides an easy way to utilize smart configurations in a Java application.
 
 ## Smart configurations
-
+"
 A smart configuration is capable of automatically reloading itself from time to time - no need to restart the application. Each configuration item is a key-value pair written in a special - yet simple - format, which allows the library to create the appropriate Java object according to its type.
 
 ## Just enough configuration
@@ -350,7 +350,7 @@ The package `reconf-spring` provides a class for easy integration with Spring, i
 </dependency>
 ```
 
-For every configuration repository, declare a bean of class "reconf.spring.RepositoryConfigurationBean" with a "configInterface" attribute configured with the interface containing the `@ConfigurationRepository` annotation.
+For every configuration repository, declare a bean of class "org.blocks4j.reconf.spring.RepositoryConfigurationBean" with a "configInterface" attribute configured with the interface containing the `@ConfigurationRepository` annotation.
 
 Assuming that we are using the interface below.
 ```java
@@ -371,7 +371,7 @@ public interface Configuration {
 The xml should look like this.
 
 ```xml
-<bean class="reconf.spring.RepositoryConfigurationBean">
+<bean class="org.blocks4j.reconf.spring.RepositoryConfigurationBean">
     <property name="configInterface" value="example.Configuration" />
 </bean>
 ```
@@ -382,7 +382,7 @@ The xml should look like this.
 The xml excerpt below creates two beans, a regular "conf" and a custom "customConf" detailed in [ConfigurationRepository reuse through Customizations](#configurationrepository-reuse-through-customizations).
 
 ```xml
-<bean id="customConf" class="reconf.spring.RepositoryConfigurationBean">
+<bean id="customConf" class="org.blocks4j.reconf.spring.RepositoryConfigurationBean">
     <property name="configInterface" value="example.Configuration"/>
     <property name="componentPrefix" value="cp-"/>
     <property name="componentSuffix" value="-cs"/>
@@ -390,7 +390,7 @@ The xml excerpt below creates two beans, a regular "conf" and a custom "customCo
     <property name="componentItemSuffix" value="-ks"/>
 </bean>
 
-<bean id="conf" class="reconf.spring.RepositoryConfigurationBean">
+<bean id="conf" class="org.blocks4j.reconf.spring.RepositoryConfigurationBean">
     <property name="configInterface" value="example.Configuration"/>
 </bean>
 ```
@@ -427,10 +427,10 @@ To listen to such events, the application developer must provide an implementati
 ```xml
     <!-- example 2 -->
     <bean id="conf" class="org.blocks4j.reconf.spring.RepositoryConfigurationBean">
-        <property name="configInterface" value="reconf.driver.Configuration"/>
+        <property name="configInterface" value="org.blocks4j.reconf.driver.Configuration"/>
         <property name="configurationItemListeners">
             <util:list>
-                <bean class="reconf.driver.MyListener"/>
+                <bean class="org.blocks4j.reconf.driver.MyListener"/>
             </util:list>
         </property>
     </bean>
