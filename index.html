@@ -33,7 +33,8 @@
 <h2>
 <a id="smart-configurations" class="anchor" href="#smart-configurations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Smart configurations</h2>
 
-<p>A smart configuration is capable of automatically reloading itself from time to time - no need to restart the application. Each configuration item is a key-value pair written in a special - yet simple - format, which allows the library to create the appropriate Java object according to its type.</p>
+<p>"
+A smart configuration is capable of automatically reloading itself from time to time - no need to restart the application. Each configuration item is a key-value pair written in a special - yet simple - format, which allows the library to create the appropriate Java object according to its type.</p>
 
 <h2>
 <a id="just-enough-configuration" class="anchor" href="#just-enough-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Just enough configuration</h2>
@@ -660,7 +661,7 @@
     &lt;<span class="pl-ent">version</span>&gt;3.0.5&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
-<p>For every configuration repository, declare a bean of class "reconf.spring.RepositoryConfigurationBean" with a "configInterface" attribute configured with the interface containing the <code>@ConfigurationRepository</code> annotation.</p>
+<p>For every configuration repository, declare a bean of class "org.blocks4j.reconf.spring.RepositoryConfigurationBean" with a "configInterface" attribute configured with the interface containing the <code>@ConfigurationRepository</code> annotation.</p>
 
 <p>Assuming that we are using the interface below.</p>
 
@@ -679,7 +680,7 @@
 
 <p>The xml should look like this.</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">bean</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">bean</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>org.blocks4j.reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
     &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>example.Configuration<span class="pl-pds">"</span></span> /&gt;
 &lt;/<span class="pl-ent">bean</span>&gt;</pre></div>
 
@@ -690,7 +691,7 @@
 
 <p>The xml excerpt below creates two beans, a regular "conf" and a custom "customConf" detailed in <a href="#configurationrepository-reuse-through-customizations">ConfigurationRepository reuse through Customizations</a>.</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>customConf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>customConf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>org.blocks4j.reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
     &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>example.Configuration<span class="pl-pds">"</span></span>/&gt;
     &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>componentPrefix<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>cp-<span class="pl-pds">"</span></span>/&gt;
     &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>componentSuffix<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>-cs<span class="pl-pds">"</span></span>/&gt;
@@ -698,7 +699,7 @@
     &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>componentItemSuffix<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>-ks<span class="pl-pds">"</span></span>/&gt;
 &lt;/<span class="pl-ent">bean</span>&gt;
 
-&lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>conf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>conf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>org.blocks4j.reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
     &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>example.Configuration<span class="pl-pds">"</span></span>/&gt;
 &lt;/<span class="pl-ent">bean</span>&gt;</pre></div>
 
@@ -732,11 +733,11 @@
     }</pre></div>
 
 <div class="highlight highlight-xml"><pre>    <span class="pl-c">&lt;!-- example 2 --&gt;</span>
-    &lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>conf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
-        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.driver.Configuration<span class="pl-pds">"</span></span>/&gt;
+    &lt;<span class="pl-ent">bean</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>conf<span class="pl-pds">"</span></span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>org.blocks4j.reconf.spring.RepositoryConfigurationBean<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configInterface<span class="pl-pds">"</span></span> <span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>org.blocks4j.reconf.driver.Configuration<span class="pl-pds">"</span></span>/&gt;
         &lt;<span class="pl-ent">property</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>configurationItemListeners<span class="pl-pds">"</span></span>&gt;
             &lt;<span class="pl-ent">util</span><span class="pl-ent">:</span><span class="pl-ent">list</span>&gt;
-                &lt;<span class="pl-ent">bean</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>reconf.driver.MyListener<span class="pl-pds">"</span></span>/&gt;
+                &lt;<span class="pl-ent">bean</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>org.blocks4j.reconf.driver.MyListener<span class="pl-pds">"</span></span>/&gt;
             &lt;/<span class="pl-ent">util</span><span class="pl-ent">:</span><span class="pl-ent">list</span>&gt;
         &lt;/<span class="pl-ent">property</span>&gt;
     &lt;/<span class="pl-ent">bean</span>&gt;</pre></div>
