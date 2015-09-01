@@ -120,7 +120,6 @@ public class ConfigurationRepositoryElement {
         this.timeUnit = timeUnit;
     }
 
-
     public Collection<ConfigurationItemListener> getConfigurationItemListeners() {
         return configurationItemListeners;
     }

@@ -16,8 +16,6 @@
 package org.blocks4j.reconf.client.elements;
 
 import java.io.File;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlValue;
 
 
 public class DatabaseConfigurationElement {
@@ -26,7 +24,6 @@ public class DatabaseConfigurationElement {
     private boolean compressed;
     private File backupLocation;
 
-    @XmlAttribute(name="max-log-file-size-in-mb")
     public int getMaxLogFileSize() {
         return maxLogFileSize;
     }
@@ -34,7 +31,6 @@ public class DatabaseConfigurationElement {
         this.maxLogFileSize = maxLogFileSize;
     }
 
-    @XmlAttribute(name="compressed")
     public boolean isCompressed() {
         return compressed;
     }
@@ -42,7 +38,6 @@ public class DatabaseConfigurationElement {
         this.compressed = compressed;
     }
 
-    @XmlValue
     public File getBackupLocation() {
         return backupLocation;
     }
