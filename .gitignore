@@ -15,6 +15,10 @@ reconf-spring/.classpath
 reconf-spring/.project
 reconf-spring/.springBeans
 target/*
+reconf-spring-boot-actuator/.settings/*
+reconf-spring-boot-actuator/target/*
+reconf-spring-boot-actuator/.classpath
+reconf-spring-boot-actuator/.project
 **/*.iml
 **/.idea/**
 reconf-servlet/.settings/org.eclipse.core.resources.prefs
