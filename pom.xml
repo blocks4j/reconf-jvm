@@ -273,6 +273,7 @@
         <module>reconf-infra</module>
         <module>reconf-client</module>
         <module>reconf-spring</module>
+        <module>reconf-spring-boot-actuator</module>
         <module>reconf-servlet</module>
     </modules>
 </project>
