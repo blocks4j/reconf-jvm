@@ -8,14 +8,14 @@ import org.springframework.context.annotation.Configuration;
 public class ReconfActuatorAutoConfiguration {
 
     @Bean
-    public ReconfSyncEndpoint reconfListEndpoint() {
+    public ReconfSyncEndpoint reconfSyncEndpoint() {
         return new ReconfSyncEndpoint();
     }
 
     @Bean
     @ConditionalOnEnabledEndpoint(ReconfSyncEndpoint.RECONF_SYNC_ENDPOINT_ID)
     public ReconfSyncMvcEndpoint reconfMvcEndpoint() {
-        return new ReconfSyncMvcEndpoint(this.reconfListEndpoint());
+        return new ReconfSyncMvcEndpoint(this.reconfSyncEndpoint());
     }
 
 }

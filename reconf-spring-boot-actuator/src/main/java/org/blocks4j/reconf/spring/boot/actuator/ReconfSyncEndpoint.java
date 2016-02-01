@@ -14,7 +14,7 @@ public class ReconfSyncEndpoint extends AbstractEndpoint<String> {
 
     private static final String RESULT_TEMPLATE = "{ \"repository\" : \"%s\", \"success\" : \"%s\" }";
 
-    public static final String RECONF_SYNC_ENDPOINT_ID = "_reconf_sync";
+    public static final String RECONF_SYNC_ENDPOINT_ID = "reconf_sync";
 
     public ReconfSyncEndpoint() {
         super(RECONF_SYNC_ENDPOINT_ID);

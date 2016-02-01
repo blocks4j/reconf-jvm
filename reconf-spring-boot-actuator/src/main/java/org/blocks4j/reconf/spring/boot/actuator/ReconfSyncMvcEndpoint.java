@@ -35,7 +35,7 @@ public class ReconfSyncMvcEndpoint extends AbstractEndpointMvcAdapter<ReconfSync
     }
 
     private String getDefaultPath() {
-        return this.getDelegate().getId().replaceAll("_", "/");
+        return "/" + this.getDelegate().getId().replaceAll("_", "/");
     }
 
     @Override
