@@ -16,9 +16,12 @@
 package org.blocks4j.reconf.client.adapters;
 
 
+import java.lang.reflect.Type;
+
 public class RawStringConfigurationAdapter implements ConfigurationAdapter {
 
-    public Object adapt(String arg) {
-        return arg;
+    @SuppressWarnings("unchecked")
+    public <T> T adapt(Type type, String raw) {
+        return (T) raw;
     }
 }

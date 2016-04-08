@@ -16,9 +16,11 @@
 package org.blocks4j.reconf.client.adapters;
 
 
+import java.lang.reflect.Type;
+
 public class NoConfigurationAdapter implements ConfigurationAdapter {
 
-    public Object adapt(String arg) {
+    public <T> T adapt(Type type, String raw) {
         return null;
     }
 }

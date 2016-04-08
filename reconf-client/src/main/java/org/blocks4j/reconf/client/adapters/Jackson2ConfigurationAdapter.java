@@ -15,10 +15,25 @@
  */
 package org.blocks4j.reconf.client.adapters;
 
+
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import java.io.IOException;
 import java.lang.reflect.Type;
 
-public interface ConfigurationAdapter {
-    NoConfigurationAdapter noConfigurationAdapter = new NoConfigurationAdapter();
+public class Jackson2ConfigurationAdapter implements ConfigurationAdapter {
 
-    <T> T adapt(Type type, String raw);
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final TypeFactory typeFactory = TypeFactory.defaultInstance();
+
+    public <T> T adapt(Type type, String json) {
+        try {
+            JavaType javaType = this.typeFactory.constructType(type);
+            return this.objectMapper.readValue(json, javaType);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
