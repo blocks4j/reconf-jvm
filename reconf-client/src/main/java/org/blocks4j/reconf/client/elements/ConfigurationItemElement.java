@@ -15,9 +15,6 @@
  */
 package org.blocks4j.reconf.client.elements;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -26,6 +23,11 @@ import org.blocks4j.reconf.client.annotations.ConfigurationItem;
 import org.blocks4j.reconf.client.annotations.UpdateConfigurationRepository;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 import org.blocks4j.reconf.infra.throwables.ReConfInitializationError;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ConfigurationItemElement {
@@ -40,35 +42,49 @@ public class ConfigurationItemElement {
 
     public static List<ConfigurationItemElement> from(ConfigurationRepositoryElement repository) {
         List<ConfigurationItemElement> result = new ArrayList<ConfigurationItemElement>();
+
         for (Method method : repository.getInterfaceClass().getMethods()) {
+            if (Modifier.isAbstract(method.getModifiers())) {
+                checkAnnotations(method);
 
-            ConfigurationItem ann = method.getAnnotation(ConfigurationItem.class);
-            if (ann == null) {
-                if(method.isAnnotationPresent(UpdateConfigurationRepository.class)) {
-                    continue;
-                }
-                throw new ReConfInitializationError(msg.format("error.not.configured.method", method.toString()));
-            }
+                ConfigurationItem ann = method.getAnnotation(ConfigurationItem.class);
 
-            ConfigurationItemElement resultItem = null;
-
-            for (ConfigurationItemElement item : repository.getConfigurationItems()) {
-                if (StringUtils.equals(item.getMethodName(), method.getName())) {
-                    resultItem = item;
+                if (ann != null) {
+                    result.add(createConfigurationItemElement(repository, method, ann));
                 }
             }
-
-            if (resultItem == null) {
-                resultItem = new ConfigurationItemElement();
-                resultItem.setMethod(method.getName());
-                resultItem.setAdapter(ann.adapter());
-                resultItem.setValue(ann.value());
-            }
-            resultItem.setMethod(method);
-            defineItemProductComponentOverride(repository, resultItem, ann);
-            result.add(resultItem);
         }
+
         return result;
+    }
+
+    private static void checkAnnotations(Method method) {
+        if (! (method.isAnnotationPresent(ConfigurationItem.class) || method.isAnnotationPresent(UpdateConfigurationRepository.class))) {
+            throw new ReConfInitializationError(msg.format("error.not.configured.method", method.toString()));
+        }
+    }
+
+    private static ConfigurationItemElement createConfigurationItemElement(ConfigurationRepositoryElement repository, Method method, ConfigurationItem ann) {
+        ConfigurationItemElement resultItem = null;
+
+        for (ConfigurationItemElement item : repository.getConfigurationItems()) {
+            if (StringUtils.equals(item.getMethodName(), method.getName())) {
+                resultItem = item;
+            }
+        }
+
+        if (resultItem == null) {
+            resultItem = new ConfigurationItemElement();
+            resultItem.setMethodName(method.getName());
+            resultItem.setAdapter(ann.adapter());
+            resultItem.setValue(ann.value());
+        }
+
+        resultItem.setMethod(method);
+
+        defineItemProductComponentOverride(repository, resultItem, ann);
+
+        return resultItem;
     }
 
     private static void defineItemProductComponentOverride(ConfigurationRepositoryElement repo, ConfigurationItemElement resultItem, ConfigurationItem annItem) {
@@ -88,7 +104,7 @@ public class ConfigurationItemElement {
     public String getMethodName() {
         return methodName;
     }
-    public void setMethod(String methodName) {
+    public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
 
@@ -141,4 +157,9 @@ public class ConfigurationItemElement {
             arg.append(key, value);
         }
     }
+
+    private static boolean isConcrete(Method method) {
+        return !Modifier.isAbstract(method.getModifiers());
+    }
+
 }
