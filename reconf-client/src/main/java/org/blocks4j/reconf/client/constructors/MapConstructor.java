@@ -39,12 +39,7 @@ public class MapConstructor implements ObjectConstructor {
     private static final MessagesBundle msg = MessagesBundle.getBundle(MapConstructor.class);
 
     public Object construct(MethodData data) throws Throwable {
-
-        if (data.hasAdapter()) {
-            return data.getAdapter().adapt(data.getReturnType(), data.getValue());
-        }
-
-        Class<?> returnClass = null;
+        Class<?> returnClass;
         Type keyType = null;
         Type valueType = null;
 

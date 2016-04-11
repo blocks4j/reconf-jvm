@@ -39,7 +39,7 @@ public class DatabaseConfigurationSource implements ConfigurationSource {
         }
 
         if (null == adapter) {
-            adapter = ConfigurationAdapter.noConfigurationAdapter;
+            adapter = ConfigurationAdapter.defaultConfigurationAdapter;
         }
 
         if (null == method) {

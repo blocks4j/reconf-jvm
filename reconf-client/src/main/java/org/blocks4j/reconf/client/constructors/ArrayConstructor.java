@@ -24,10 +24,6 @@ import org.blocks4j.reconf.client.factory.ObjectConstructorFactory;
 public class ArrayConstructor implements ObjectConstructor {
 
     public Object construct(MethodData data) throws Throwable {
-        if (data.hasAdapter()) {
-            return data.getAdapter().adapt(data.getReturnType(), data.getValue());
-        }
-
         Class<?> returnClass;
 
         if (data.getReturnType() instanceof Class<?>) {

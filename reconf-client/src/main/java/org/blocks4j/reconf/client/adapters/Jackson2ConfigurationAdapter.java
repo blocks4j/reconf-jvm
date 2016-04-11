@@ -19,19 +19,20 @@ package org.blocks4j.reconf.client.adapters;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import org.blocks4j.reconf.client.constructors.MethodData;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 
-public class Jackson2ConfigurationAdapter implements ConfigurationAdapter {
+public class Jackson2ConfigurationAdapter implements ConfigurationAdapter<Object> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final TypeFactory typeFactory = TypeFactory.defaultInstance();
 
-    public <T> T adapt(Type type, String json) {
+    @Override
+    public Object adapt(MethodData methodData) {
         try {
-            JavaType javaType = this.typeFactory.constructType(type);
-            return this.objectMapper.readValue(json, javaType);
+            JavaType javaType = this.typeFactory.constructType(methodData.getReturnType());
+            return this.objectMapper.readValue(methodData.getValue(), javaType);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

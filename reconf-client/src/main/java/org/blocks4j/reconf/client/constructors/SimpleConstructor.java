@@ -41,10 +41,6 @@ public class SimpleConstructor implements ObjectConstructor {
     };
 
     public Object construct(MethodData data) throws Throwable {
-        if (data.hasAdapter()) {
-            return data.getAdapter().adapt(data.getReturnType(), data.getValue());
-        }
-
         Class<?> returnClass = (Class<?>) data.getReturnType();
 
         String trimmed = StringUtils.defaultString(StringUtils.trim(data.getValue()));

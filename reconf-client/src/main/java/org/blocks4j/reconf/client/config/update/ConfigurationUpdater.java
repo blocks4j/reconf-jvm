@@ -15,6 +15,15 @@
  */
 package org.blocks4j.reconf.client.config.update;
 
+import org.apache.commons.lang3.StringUtils;
+import org.blocks4j.reconf.client.check.ObservableThread;
+import org.blocks4j.reconf.client.config.source.ConfigurationSource;
+import org.blocks4j.reconf.client.constructors.MethodData;
+import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
+import org.blocks4j.reconf.client.proxy.MethodConfiguration;
+import org.blocks4j.reconf.infra.i18n.MessagesBundle;
+import org.blocks4j.reconf.infra.log.LoggerHolder;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,15 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.lang3.StringUtils;
-import org.blocks4j.reconf.client.check.ObservableThread;
-import org.blocks4j.reconf.client.config.source.ConfigurationSource;
-import org.blocks4j.reconf.client.constructors.MethodData;
-import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
-import org.blocks4j.reconf.client.factory.ObjectConstructorFactory;
-import org.blocks4j.reconf.client.proxy.MethodConfiguration;
-import org.blocks4j.reconf.infra.i18n.MessagesBundle;
-import org.blocks4j.reconf.infra.log.LoggerHolder;
 
 
 public abstract class ConfigurationUpdater extends ObservableThread {
@@ -78,7 +78,7 @@ public abstract class ConfigurationUpdater extends ObservableThread {
 
     protected boolean updateMap(String value, boolean newValue, ConfigurationSource obtained, ConfigurationItemUpdateResult.Source source) throws Throwable {
         Class<?> clazz = methodCfg.getMethod().getReturnType();
-        MethodData data = null;
+        MethodData data;
         if (clazz.isArray()) {
             data = new MethodData(methodCfg.getMethod(), clazz.getComponentType(), value, obtained.getAdapter());
 
@@ -90,23 +90,23 @@ public abstract class ConfigurationUpdater extends ObservableThread {
         }
 
         ConfigurationItemElement elem = methodCfg.getConfigurationItemElement();
-        ConfigurationItemUpdateResult.Builder builder = null;
+        ConfigurationItemUpdateResult.Builder builder;
 
         try {
             if (newValue || isSync) {
-                builder = ConfigurationItemUpdateResult.Builder.update(ObjectConstructorFactory.get(clazz).construct(data));
+                builder = ConfigurationItemUpdateResult.Builder.update(data.getAdapter().adapt(data));
 
             } else {
                 builder = ConfigurationItemUpdateResult.Builder.noChange();
             }
 
             builder.valueRead(data.getValue())
-            .product(elem.getProduct())
-            .component(elem.getComponent())
-            .item(elem.getValue())
-            .method(methodCfg.getMethod())
-            .cast(methodCfg.getMethod().getReturnType())
-            .from(source);
+                   .product(elem.getProduct())
+                   .component(elem.getComponent())
+                   .item(elem.getValue())
+                   .method(methodCfg.getMethod())
+                   .cast(methodCfg.getMethod().getReturnType())
+                   .from(source);
 
         } catch (Throwable t) {
             updateLastResultWithError(source, elem, value, t);
@@ -121,12 +121,12 @@ public abstract class ConfigurationUpdater extends ObservableThread {
     protected void updateLastResultWithError(ConfigurationItemUpdateResult.Source source, ConfigurationItemElement elem, String value, Throwable t) {
         ConfigurationItemUpdateResult.Builder builder = ConfigurationItemUpdateResult.Builder.error(t);
         builder.valueRead(value)
-        .product(elem.getProduct())
-        .component(elem.getComponent())
-        .item(elem.getValue())
-        .method(methodCfg.getMethod())
-        .cast(methodCfg.getMethod().getReturnType())
-        .from(source);
+               .product(elem.getProduct())
+               .component(elem.getComponent())
+               .item(elem.getValue())
+               .method(methodCfg.getMethod())
+               .cast(methodCfg.getMethod().getReturnType())
+               .from(source);
 
         lastResult = builder.build();
         methodValue.put(methodCfg.getMethod(), lastResult);

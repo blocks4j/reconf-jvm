@@ -43,12 +43,7 @@ public class CollectionConstructor implements ObjectConstructor {
     private static final MessagesBundle msg = MessagesBundle.getBundle(CollectionConstructor.class);
 
     public Object construct(MethodData data) throws Throwable {
-
-        if (data.hasAdapter()) {
-            return data.getAdapter().adapt(data.getReturnType(), data.getValue());
-        }
-
-        Class<?> returnClass = null;
+        Class<?> returnClass;
         Type innerClass = null;
 
         if (data.getReturnType() instanceof ParameterizedType){
