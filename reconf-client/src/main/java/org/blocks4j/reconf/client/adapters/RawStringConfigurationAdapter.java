@@ -20,7 +20,6 @@ import org.blocks4j.reconf.client.constructors.MethodData;
 
 public class RawStringConfigurationAdapter implements ConfigurationAdapter<String> {
 
-    @SuppressWarnings("unchecked")
     public String adapt(MethodData methodData) {
         return methodData.toString();
     }

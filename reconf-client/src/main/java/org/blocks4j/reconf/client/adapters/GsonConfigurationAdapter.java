@@ -25,7 +25,6 @@ public class GsonConfigurationAdapter implements ConfigurationAdapter<Object> {
     private Gson mapper = new GsonBuilder().create();
 
     @Override
-    @SuppressWarnings("unchecked")
     public Object adapt(MethodData methodData) {
         return this.mapper.fromJson(methodData.getValue(), methodData.getReturnType());
     }
