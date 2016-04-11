@@ -78,7 +78,7 @@ Add these lines to the `pom.xml` file
 <dependency>
     <groupId>org.blocks4j.reconf</groupId>
     <artifactId>reconf-client</artifactId>
-    <version>${project.version}</version>
+    <version>3.0.5</version>
 </dependency>
 ```
 
