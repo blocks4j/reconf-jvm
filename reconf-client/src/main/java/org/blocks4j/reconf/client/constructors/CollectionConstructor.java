@@ -45,7 +45,7 @@ public class CollectionConstructor implements ObjectConstructor {
     public Object construct(MethodData data) throws Throwable {
 
         if (data.hasAdapter()) {
-            return data.getAdapter().adapt(data.getValue());
+            return data.getAdapter().adapt(data.getReturnType(), data.getValue());
         }
 
         Class<?> returnClass = null;

@@ -15,10 +15,17 @@
  */
 package org.blocks4j.reconf.client.adapters;
 
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.lang.reflect.Type;
 
-public interface ConfigurationAdapter {
-    NoConfigurationAdapter noConfigurationAdapter = new NoConfigurationAdapter();
+public class GsonConfigurationAdapter implements ConfigurationAdapter {
 
-    <T> T adapt(Type type, String raw);
+    private Gson mapper = new GsonBuilder().create();
+
+    public <T> T adapt(Type type, String json) {
+        return this.mapper.fromJson(json, type);
+    }
 }
