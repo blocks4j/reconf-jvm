@@ -74,7 +74,8 @@ public class Environment {
                 throw new ReConfInitializationError("configuration file is either empty or could not be found");
             }
 
-            PropertiesConfigurationParser parser = new PropertiesConfigurationParser(raw, System.getProperty(SYSTEM_PROPERTY_PREFIX));
+            String prefix = System.getProperty(SYSTEM_PROPERTY_PREFIX);
+            PropertiesConfigurationParser parser = new PropertiesConfigurationParser(raw, prefix);
             LocaleHolder.set(parser.getLocale());
 
             config = new PropertiesConfiguration();
