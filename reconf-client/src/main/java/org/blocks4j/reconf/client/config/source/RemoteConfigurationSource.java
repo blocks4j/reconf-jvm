@@ -36,7 +36,7 @@ public class RemoteConfigurationSource implements ConfigurationSource {
             throw new NullPointerException(msg.get("error.key"));
         }
         if (null == adapter) {
-            adapter = ConfigurationAdapter.noConfigurationAdapter;
+            adapter = ConfigurationAdapter.defaultConfigurationAdapter;
         }
 
         this.key = key;

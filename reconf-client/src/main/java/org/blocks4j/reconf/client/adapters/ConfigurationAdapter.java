@@ -15,10 +15,10 @@
  */
 package org.blocks4j.reconf.client.adapters;
 
-import java.lang.reflect.Type;
+import org.blocks4j.reconf.client.constructors.MethodData;
 
-public interface ConfigurationAdapter {
-    NoConfigurationAdapter noConfigurationAdapter = new NoConfigurationAdapter();
+public interface ConfigurationAdapter<T> {
+    ConfigurationAdapter<?> defaultConfigurationAdapter = new DefaultConfigurationAdapter();
 
-    <T> T adapt(Type type, String raw);
+    T adapt(MethodData methodData);
 }

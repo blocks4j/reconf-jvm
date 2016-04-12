@@ -15,12 +15,15 @@
  */
 package org.blocks4j.reconf.client.validation;
 
+import org.apache.commons.lang3.StringUtils;
+import org.blocks4j.reconf.client.adapters.ConfigurationAdapter;
+import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
+import org.blocks4j.reconf.infra.i18n.MessagesBundle;
+
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
-import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
-import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 
 public class ConfigurationItemElementValidator {
 
@@ -59,9 +62,30 @@ public class ConfigurationItemElementValidator {
     }
 
     private static void checkAdapter(String prefix, ConfigurationItemElement arg, Map<String, String> errors) {
-        if (arg.getAdapter() == null) {
-            errors.put(prefix + "@ConfigurationItem", msg.get("adapter.null"));
+        Class<? extends ConfigurationAdapter> adapter = arg.getAdapter();
+        if (adapter == null) {
+            errors.put(prefix + "@ConfigurationItem", msg.get("error.adapter.null"));
+        } else {
+            if (isInvalidAdapterForReturnType(adapter, arg.getMethod().getReturnType())) {
+                errors.put(prefix + "@ConfigurationItem", msg.get("error.adapter.incompatible.type"));
+            }
         }
+    }
+
+    private static boolean isInvalidAdapterForReturnType(Class<? extends ConfigurationAdapter> adapter, Class<?> returnType) {
+        try {
+            Method interfaceMethod = getInterfaceAdapterMethod();
+            Method adapterMethod = adapter.getMethod(interfaceMethod.getName(), interfaceMethod.getParameterTypes());
+
+            return !(returnType.isAssignableFrom(adapterMethod.getReturnType()) ||
+                    adapterMethod.getReturnType().isAssignableFrom(returnType));
+        } catch (Exception exception) {
+            return true;
+        }
+    }
+
+    private static Method getInterfaceAdapterMethod() {
+        return ConfigurationAdapter.class.getMethods()[0];
     }
 
     private static void checkMethod(String prefix, ConfigurationItemElement arg, Map<String, String> errors) {

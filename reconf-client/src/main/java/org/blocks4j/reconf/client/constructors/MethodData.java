@@ -15,11 +15,10 @@
  */
 package org.blocks4j.reconf.client.constructors;
 
+import org.blocks4j.reconf.client.adapters.ConfigurationAdapter;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import org.blocks4j.reconf.client.adapters.ConfigurationAdapter;
-import org.blocks4j.reconf.client.adapters.NoConfigurationAdapter;
-
 
 public class MethodData {
 
@@ -56,9 +55,5 @@ public class MethodData {
 
     public ConfigurationAdapter getAdapter() {
         return adapter;
-    }
-
-    public boolean hasAdapter() {
-        return adapter != null && !(adapter instanceof NoConfigurationAdapter);
     }
 }

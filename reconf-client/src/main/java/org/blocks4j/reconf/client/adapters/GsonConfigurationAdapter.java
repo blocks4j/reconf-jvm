@@ -18,14 +18,14 @@ package org.blocks4j.reconf.client.adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.blocks4j.reconf.client.constructors.MethodData;
 
-import java.lang.reflect.Type;
-
-public class GsonConfigurationAdapter implements ConfigurationAdapter {
+public class GsonConfigurationAdapter implements ConfigurationAdapter<Object> {
 
     private Gson mapper = new GsonBuilder().create();
 
-    public <T> T adapt(Type type, String json) {
-        return this.mapper.fromJson(json, type);
+    @Override
+    public Object adapt(MethodData methodData) {
+        return this.mapper.fromJson(methodData.getValue(), methodData.getReturnType());
     }
 }

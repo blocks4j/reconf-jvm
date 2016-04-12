@@ -16,11 +16,18 @@
 package org.blocks4j.reconf.client.adapters;
 
 
-import java.lang.reflect.Type;
+import org.blocks4j.reconf.client.constructors.MethodData;
+import org.blocks4j.reconf.client.factory.ObjectConstructorFactory;
 
-public class NoConfigurationAdapter implements ConfigurationAdapter {
+public class DefaultConfigurationAdapter implements ConfigurationAdapter<Object> {
 
-    public <T> T adapt(Type type, String raw) {
-        return null;
+    public Object adapt(MethodData methodData) {
+        try {
+            return ObjectConstructorFactory.get(methodData.getReturnType()).construct(methodData);
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
     }
 }

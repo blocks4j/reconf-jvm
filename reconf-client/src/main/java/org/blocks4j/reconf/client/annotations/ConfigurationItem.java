@@ -21,7 +21,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import org.apache.commons.lang3.StringUtils;
 import org.blocks4j.reconf.client.adapters.ConfigurationAdapter;
-import org.blocks4j.reconf.client.adapters.NoConfigurationAdapter;
+import org.blocks4j.reconf.client.adapters.DefaultConfigurationAdapter;
 
 
 @Target(METHOD)
@@ -31,6 +31,6 @@ public @interface ConfigurationItem {
     String value();
     String component() default StringUtils.EMPTY;
     String product() default StringUtils.EMPTY;
-    Class<? extends ConfigurationAdapter> adapter() default NoConfigurationAdapter.class;
+    Class<? extends ConfigurationAdapter<?>> adapter() default DefaultConfigurationAdapter.class;
     String qualifier() default StringUtils.EMPTY;
 }
