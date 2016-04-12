@@ -78,7 +78,7 @@ Add these lines to the `pom.xml` file
 <dependency>
     <groupId>org.blocks4j.reconf</groupId>
     <artifactId>reconf-client</artifactId>
-    <version>3.0.5</version>
+    <version>3.0.6</version>
 </dependency>
 ```
 
@@ -344,9 +344,9 @@ The package `reconf-spring` provides a class for easy integration with Spring, i
 
 ```xml
 <dependency>
-    <groupId>br.com.uol.reconf</groupId>
+    <groupId>org.blocks4j.reconf</groupId>
     <artifactId>reconf-spring</artifactId>
-    <version>${project.version}</version>
+    <version>3.0.6</version>
 </dependency>
 ```
 
@@ -462,9 +462,9 @@ The package `reconf-servlet` enables users and/or applications the remote admini
 
 ```xml
 <dependency>
-    <groupId>br.com.uol.reconf</groupId>
+    <groupId>org.blocks4j.reconf</groupId>
     <artifactId>reconf-servlet</artifactId>
-    <version>${project.version}</version>
+    <version>3.0.6</version>
 </dependency>
 ```
 
