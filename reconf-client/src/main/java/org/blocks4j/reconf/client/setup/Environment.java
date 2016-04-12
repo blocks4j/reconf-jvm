@@ -15,12 +15,6 @@
  */
 package org.blocks4j.reconf.client.setup;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.blocks4j.reconf.client.check.ObservableThread;
@@ -36,11 +30,22 @@ import org.blocks4j.reconf.infra.system.LineSeparator;
 import org.blocks4j.reconf.infra.system.LocalHostname;
 import org.blocks4j.reconf.infra.throwables.ReConfInitializationError;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+
 
 public class Environment {
 
     private static final String RECONF_DEFAULT_FILE = "reconf.properties";
-    private static final String SYSTEM_PROPERTY = "reconf.client.file.location";
+    public static final String SYSTEM_PROPERTY = "reconf.client.file.location";
+    public static final String SYSTEM_PROPERTY_PREFIX = "reconf.client.file.properties.prefix";
+
     private static final PropertiesConfiguration config;
     private static final ConfigurationRepositoryElementFactory factory;
     private static DatabaseManager mgr;
@@ -53,18 +58,23 @@ public class Environment {
 
             String prop = System.getProperty(SYSTEM_PROPERTY);
             if (StringUtils.isNotBlank(prop)) {
-                LoggerHolder.getLog().info(String.format("system property [%s] found. trying to read file [%s]", SYSTEM_PROPERTY, prop));
-                raw.load(new FileInputStream(new File(prop)));
+                loadUserDefinedProperties(raw, prop);
+            }
 
-            } else {
+            if (raw.isEmpty()) {
+                System.clearProperty(SYSTEM_PROPERTY_PREFIX);
                 LoggerHolder.getLog().info(String.format("trying to read file [%s] from classpath", RECONF_DEFAULT_FILE));
-                raw.load(ClasspathInputStream.from(RECONF_DEFAULT_FILE));
+                InputStream defaultFileIS = ClasspathInputStream.from(RECONF_DEFAULT_FILE);
+
+                if (defaultFileIS != null) {
+                    raw.load(defaultFileIS);
+                }
             }
             if (raw.isEmpty()) {
                 throw new ReConfInitializationError("configuration file is either empty or could not be found");
             }
 
-            PropertiesConfigurationParser parser = new PropertiesConfigurationParser(raw);
+            PropertiesConfigurationParser parser = new PropertiesConfigurationParser(raw, System.getProperty(SYSTEM_PROPERTY_PREFIX));
             LocaleHolder.set(parser.getLocale());
 
             config = new PropertiesConfiguration();
@@ -88,6 +98,8 @@ public class Environment {
             checker.start();
 
             if (config.isExperimentalFeatures()) {
+                LoggerHolder.getLog().info(msg.format("experimental.features.enabled", LocalHostname.getName()));
+                LoggerHolder.getLog().info(msg.format("experimental.features.none"));
             }
 
         } catch (ReConfInitializationError e) {
@@ -101,6 +113,23 @@ public class Environment {
                 mgr.shutdown();
             }
             throw new ReConfInitializationError(t);
+        }
+    }
+
+    private static void loadUserDefinedProperties(Properties raw, String userDefinedPropertyFileLocation) throws IOException {
+        LoggerHolder.getLog().info(String.format("system property [%s] found. trying to read file [%s]", SYSTEM_PROPERTY, userDefinedPropertyFileLocation));
+        InputStream userDefinedProperties = ClasspathInputStream.from(userDefinedPropertyFileLocation);
+        if (userDefinedProperties == null) {
+            File file = new File(userDefinedPropertyFileLocation);
+            if (file.exists()) {
+                userDefinedProperties = new FileInputStream(file);
+            } else {
+                LoggerHolder.getLog().info(String.format("file [%s] not found.", userDefinedPropertyFileLocation));
+            }
+        }
+
+        if (userDefinedProperties != null) {
+            raw.load(userDefinedProperties);
         }
     }
 
