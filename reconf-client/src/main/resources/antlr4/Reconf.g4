@@ -3,7 +3,7 @@ grammar Reconf;
 value : primitive
        | structure;
 
-structure: EMPTY_STRUCTURE
+structure: OPEN_BRACKET CLOSE_BRACKET
           |collection
           | map;
 
@@ -30,6 +30,7 @@ fragment HEX
    : [0-9a-fA-F]
    ;
 
-EMPTY_STRUCTURE : '[]';
+OPEN_BRACKET : '[';
+CLOSE_BRACKET : ']';
 
 WS : [ \t\r\n]+ -> skip ;
