@@ -1,5 +1,7 @@
 package org.blocks4j.reconf.client.adapters.antlr4;
 
+import org.antlr.v4.runtime.tree.ErrorNode;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Type;
@@ -49,6 +51,11 @@ public class ArrayTypeAwareReconfVisitor extends ReconfBaseVisitor<Object> {
     @Override
     public Object visitPrimitive(ReconfParser.PrimitiveContext ctx) {
         throw new IllegalStateException();
+    }
+
+    @Override
+    public Object visitErrorNode(ErrorNode node) {
+        throw new IllegalArgumentException();
     }
 
     @Override

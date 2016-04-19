@@ -1,5 +1,6 @@
 package org.blocks4j.reconf.client.adapters.antlr4;
 
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 
 import java.lang.reflect.Constructor;
@@ -75,6 +76,12 @@ public class CollectionTypeAwareReconfVisitor extends ReconfBaseVisitor<Collecti
     public Collection<Object> visitPrimitive(ReconfParser.PrimitiveContext ctx) {
         throw new IllegalStateException();
     }
+
+    @Override
+    public Collection<Object> visitErrorNode(ErrorNode node) {
+        throw new IllegalArgumentException();
+    }
+
 
     @SuppressWarnings("unchecked")
     private Collection<Object> createCollection() {

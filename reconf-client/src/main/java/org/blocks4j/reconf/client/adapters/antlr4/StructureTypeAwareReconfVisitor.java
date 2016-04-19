@@ -1,5 +1,7 @@
 package org.blocks4j.reconf.client.adapters.antlr4;
 
+import org.antlr.v4.runtime.tree.ErrorNode;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -15,7 +17,7 @@ public class StructureTypeAwareReconfVisitor extends ReconfBaseVisitor<Object> {
 
     @Override
     public Object visitStructure(ReconfParser.StructureContext ctx) {
-        if (ctx.EMPTY_STRUCTURE() != null) {
+        if (ctx.getChildCount() == 0) {
             if (baseType instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType) baseType;
 
@@ -67,5 +69,10 @@ public class StructureTypeAwareReconfVisitor extends ReconfBaseVisitor<Object> {
     @Override
     public Object visitPrimitive(ReconfParser.PrimitiveContext ctx) {
         throw new IllegalStateException();
+    }
+
+    @Override
+    public Object visitErrorNode(ErrorNode node) {
+        throw new IllegalArgumentException();
     }
 }

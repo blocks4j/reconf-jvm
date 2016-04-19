@@ -1,5 +1,6 @@
 package org.blocks4j.reconf.client.adapters.antlr4;
 
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.apache.commons.lang3.StringUtils;
 import org.blocks4j.reconf.infra.converter.BasicConverter;
 
@@ -33,6 +34,11 @@ public class TypeAwareReconfVisitor extends ReconfBaseVisitor<Object> {
     @Override
     public Object visitMapEntry(ReconfParser.MapEntryContext ctx) {
         throw new IllegalStateException();
+    }
+
+    @Override
+    public Object visitErrorNode(ErrorNode node) {
+        throw new IllegalArgumentException();
     }
 
     @Override

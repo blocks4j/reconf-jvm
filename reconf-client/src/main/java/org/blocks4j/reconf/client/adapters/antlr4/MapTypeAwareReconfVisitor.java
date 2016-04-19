@@ -1,12 +1,17 @@
 package org.blocks4j.reconf.client.adapters.antlr4;
 
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
@@ -91,6 +96,11 @@ public class MapTypeAwareReconfVisitor extends ReconfBaseVisitor<Map<Object, Obj
     @Override
     public Map<Object, Object> visitPrimitive(ReconfParser.PrimitiveContext ctx) {
         throw new IllegalStateException();
+    }
+
+    @Override
+    public Map<Object, Object> visitErrorNode(ErrorNode node) {
+        throw new IllegalArgumentException();
     }
 
     private void loadCollectionInformation(Type baseType) {
