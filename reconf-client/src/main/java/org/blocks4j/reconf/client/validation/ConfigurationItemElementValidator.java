@@ -15,6 +15,7 @@
  */
 package org.blocks4j.reconf.client.validation;
 
+import com.google.gson.internal.Primitives;
 import org.apache.commons.lang3.StringUtils;
 import org.blocks4j.reconf.client.adapters.ConfigurationAdapter;
 import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
@@ -31,7 +32,7 @@ public class ConfigurationItemElementValidator {
 
     public static Map<String, String> validate(int pos, ConfigurationItemElement arg) {
         if (arg == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
 
         Map<String, String> errors = new LinkedHashMap<String, String>();
@@ -77,8 +78,10 @@ public class ConfigurationItemElementValidator {
             Method interfaceMethod = getInterfaceAdapterMethod();
             Method adapterMethod = adapter.getMethod(interfaceMethod.getName(), interfaceMethod.getParameterTypes());
 
-            return !(returnType.isAssignableFrom(adapterMethod.getReturnType()) ||
-                    adapterMethod.getReturnType().isAssignableFrom(returnType));
+            Class<?> desiredType = Primitives.wrap(returnType);
+
+            return !(desiredType.isAssignableFrom(adapterMethod.getReturnType()) ||
+                     adapterMethod.getReturnType().isAssignableFrom(desiredType));
         } catch (Exception exception) {
             return true;
         }

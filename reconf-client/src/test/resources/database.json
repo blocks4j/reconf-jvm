@@ -1,0 +1,15 @@
+{
+  "database": {
+    "/reconf/client/Integer": "'134'",
+    "/reconf/client/int": "'134'",
+    "/reconf/client/Double": "'134.1'",
+    "/reconf/client/double": "'134.1'",
+    "/reconf/client/Boolean": "'true'",
+    "/reconf/client/boolean": "'true'",
+    "/reconf/client/Long": "'134'",
+    "/reconf/client/long": "'134'",
+    "/reconf/client/IntegerList": "['134']",
+    "/reconf/client/IntegerSet": "['134']",
+    "/reconf/client/IntegerStringMap": "['134':'xico']"
+  }
+}
