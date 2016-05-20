@@ -13,6 +13,8 @@ import org.junit.runner.RunWith;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Map;
+import java.util.Set;
 
 @RunWith(SeparateClassloaderTestRunner.class)
 public class FullTest extends LocalServerTestBase {
@@ -59,8 +61,50 @@ public class FullTest extends LocalServerTestBase {
         Assert.assertNotNull(reconfTest.getLongPrimitive());
         Assert.assertNotNull(reconfTest.getIntegerList());
         Assert.assertNotNull(reconfTest.getIntegerSet());
+        Assert.assertNotNull(reconfTest.getIntegerSet_empty());
+        Assert.assertTrue(reconfTest.getIntegerSet_empty().isEmpty());
         Assert.assertNotNull(reconfTest.getIntegerStringMap());
+
+        Map<Integer, Set<String>> integerSetStringMap_allFull = reconfTest.getIntegerSetStringMap_AllFull();
+        Assert.assertNotNull(integerSetStringMap_allFull);
+        for (Map.Entry<Integer, Set<String>> integerSetStringMap_allFullEntry : integerSetStringMap_allFull.entrySet()) {
+            Assert.assertNotNull(integerSetStringMap_allFullEntry.getKey());
+            Assert.assertNotNull(integerSetStringMap_allFullEntry.getValue());
+            Assert.assertFalse(integerSetStringMap_allFullEntry.getValue().isEmpty());
+        }
+
+        Map<Integer, Set<String>> integerSetStringMap_someEmpty = reconfTest.getIntegerSetStringMap_SecondEmpty();
+        Assert.assertNotNull(integerSetStringMap_allFull);
+        for (Map.Entry<Integer, Set<String>> integerSetStringMap_allFullEntry : integerSetStringMap_allFull.entrySet()) {
+            Assert.assertNotNull(integerSetStringMap_allFullEntry.getKey());
+            Assert.assertNotNull(integerSetStringMap_allFullEntry.getValue());
+        }
+
+        Map<Integer, Map<String, Set<String>>> integerMapStringSetStringMap_AllFull = reconfTest.getIntegerMapStringSetStringMap_AllFull();
+        Assert.assertNotNull(integerMapStringSetStringMap_AllFull);
+        for (Map.Entry<Integer, Map<String, Set<String>>> integerMapStringSetStringMap_AllFullEntry : integerMapStringSetStringMap_AllFull.entrySet()) {
+            Assert.assertNotNull(integerMapStringSetStringMap_AllFullEntry.getKey());
+            Assert.assertNotNull(integerMapStringSetStringMap_AllFullEntry.getValue());
+            Assert.assertFalse(integerMapStringSetStringMap_AllFullEntry.getValue().isEmpty());
+
+            for (Map.Entry<String, Set<String>> stringSetEntry : integerMapStringSetStringMap_AllFullEntry.getValue().entrySet()) {
+                Assert.assertNotNull(stringSetEntry.getKey());
+                Assert.assertNotNull(stringSetEntry.getValue());
+                Assert.assertFalse(stringSetEntry.getValue().isEmpty());
+            }
+
+        }
+
+        Map<Integer, Map<String, Set<String>>> integerMapStringSetStringMap_oneEmpty = reconfTest.getIntegerMapStringSetStringMap_OneEmpty();
+        Assert.assertNotNull(integerMapStringSetStringMap_oneEmpty);
+        for (Map.Entry<Integer, Map<String, Set<String>>> integerMapStringSetStringMap_AllFullEntry : integerMapStringSetStringMap_oneEmpty.entrySet()) {
+            Assert.assertNotNull(integerMapStringSetStringMap_AllFullEntry.getKey());
+            Assert.assertNotNull(integerMapStringSetStringMap_AllFullEntry.getValue());
+
+            for (Map.Entry<String, Set<String>> stringSetEntry : integerMapStringSetStringMap_AllFullEntry.getValue().entrySet()) {
+                Assert.assertNotNull(stringSetEntry.getKey());
+                Assert.assertNotNull(stringSetEntry.getValue());
+            }
+        }
     }
-
-
 }

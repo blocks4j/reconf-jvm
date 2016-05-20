@@ -10,6 +10,11 @@
     "/reconf/client/long": "'134'",
     "/reconf/client/IntegerList": "['134']",
     "/reconf/client/IntegerSet": "['134']",
-    "/reconf/client/IntegerStringMap": "['134':'xico']"
+    "/reconf/client/IntegerSet_empty": "[]",
+    "/reconf/client/IntegerStringMap": "['134':'xico']",
+    "/reconf/client/IntegerSetStringMap_AllFull": "['134':['xico'],'123':['xico']]",
+    "/reconf/client/IntegerSetStringMap_oneEmpty": "['134':['xico'],'123':[]]",
+    "/reconf/client/IntegerMapStringSetStringMap_AllFull": "['134':['xico':['set1','set2']], '133':['xico':['set1','set2']]]",
+    "/reconf/client/IntegerMapStringSetStringMap_oneEmpty": "['134':['xico':['set1','set2']], '133':['xico':[]],'132':['xico':[]]]"
   }
 }

@@ -15,7 +15,7 @@
  */
 package org.blocks4j.reconf.client.validation;
 
-import com.google.gson.internal.Primitives;
+import com.google.common.primitives.Primitives;
 import org.apache.commons.lang3.StringUtils;
 import org.blocks4j.reconf.client.adapters.ConfigurationAdapter;
 import org.blocks4j.reconf.client.elements.ConfigurationItemElement;

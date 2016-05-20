@@ -17,7 +17,7 @@ public class StructureTypeAwareReconfVisitor extends ReconfBaseVisitor<Object> {
 
     @Override
     public Object visitStructure(ReconfParser.StructureContext ctx) {
-        if (ctx.getChildCount() == 0) {
+        if (ctx.OPEN_BRACKET() != null) {
             if (baseType instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType) baseType;
 
