@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.blocks4j.reconf</groupId>
         <artifactId>reconf-parent</artifactId>
-        <version>3.0.11-SNAPSHOT</version>
+        <version>3.0.11</version>
     </parent>
     <artifactId>reconf-infra</artifactId>
     <name>ReConf Infrastructure</name>
