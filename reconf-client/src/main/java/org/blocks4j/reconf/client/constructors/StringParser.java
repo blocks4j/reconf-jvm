@@ -28,8 +28,8 @@ import org.blocks4j.reconf.infra.system.LineSeparator;
 public class StringParser {
 
     private static final MessagesBundle msg = MessagesBundle.getBundle(StringParser.class);
-    private List<String> tokens = new ArrayList<String>();
-    private final Stack<Character> openClose = new Stack<Character>();
+    private List<String> tokens = new ArrayList<>();
+    private final Stack<Character> openClose = new Stack<>();
     private MethodData data;
 
     public StringParser(MethodData arg) {
@@ -57,7 +57,7 @@ public class StringParser {
         boolean valueOpen = false;
         boolean escaped = false;
 
-        Stack<Character> token = new Stack<Character>();
+        Stack<Character> token = new Stack<>();
         for (int i = 0; i < arg.length(); i++) {
             char c = arg.charAt(i);
 
@@ -156,7 +156,7 @@ public class StringParser {
     }
 
     public List<String> getTokens() {
-        return new ArrayList<String>(tokens);
+        return new ArrayList<>(tokens);
     }
 
     public Map<String, String> getTokensAsMap() {
@@ -164,7 +164,7 @@ public class StringParser {
             throw new IllegalStateException(msg.format("error.map", LineSeparator.value(), tokens, data.getMethod()));
         }
 
-        Map<String, String> result = new LinkedHashMap<String, String>();
+        Map<String, String> result = new LinkedHashMap<>();
         String current = "";
         for (int i = 0; i < tokens.size(); i++) {
             if (i % 2 == 0) {

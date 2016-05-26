@@ -47,7 +47,7 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
     private static final MessagesBundle msg = MessagesBundle.getBundle(ConfigurationRepositoryUpdater.class);
     private final ConfigurationRepositoryElement cfgRepository;
     private final ConfigurationRepositoryData data;
-    private Map<Method, Object> methodValue = new ConcurrentHashMap<Method, Object>();
+    private Map<Method, Object> methodValue = new ConcurrentHashMap<>();
     private final ConfigurationRepositoryFactory factory;
     private ServiceLocator locator;
     private Collection<ConfigurationItemListener> listeners = Collections.EMPTY_LIST;
@@ -88,12 +88,12 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
 
     private void load() {
         CountDownLatch latch = new CountDownLatch(data.getAll().size() + data.getAtomicReload().size());
-        List<ConfigurationUpdater> toExecuteGlobal = new ArrayList<ConfigurationUpdater>();
-        List<ConfigurationUpdater> toExecuteLocal = new ArrayList<ConfigurationUpdater>();
-        List<ConfigurationUpdater> toExecuteRemote = new ArrayList<ConfigurationUpdater>();
+        List<ConfigurationUpdater> toExecuteGlobal = new ArrayList<>();
+        List<ConfigurationUpdater> toExecuteLocal = new ArrayList<>();
+        List<ConfigurationUpdater> toExecuteRemote = new ArrayList<>();
 
-        Map<Method, ConfigurationItemUpdateResult> remote = new ConcurrentHashMap<Method, ConfigurationItemUpdateResult>();
-        Map<Method, ConfigurationItemUpdateResult> local = new ConcurrentHashMap<Method, ConfigurationItemUpdateResult>();
+        Map<Method, ConfigurationItemUpdateResult> remote = new ConcurrentHashMap<>();
+        Map<Method, ConfigurationItemUpdateResult> local = new ConcurrentHashMap<>();
 
         try {
             for (MethodConfiguration config : data.getAll()) {
@@ -160,9 +160,9 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
     }
 
     private void update() {
-        List<ConfigurationUpdater> toExecute = new ArrayList<ConfigurationUpdater>(data.getAtomicReload().size());
+        List<ConfigurationUpdater> toExecute = new ArrayList<>(data.getAtomicReload().size());
         CountDownLatch latch = new CountDownLatch(data.getAtomicReload().size());
-        Map<Method, ConfigurationItemUpdateResult> updated = new ConcurrentHashMap<Method, ConfigurationItemUpdateResult>();
+        Map<Method, ConfigurationItemUpdateResult> updated = new ConcurrentHashMap<>();
 
         try {
             for (MethodConfiguration config : data.getAtomicReload()) {
@@ -195,7 +195,7 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
             return methodValue;
         }
 
-        Map<Method,Object> result = new ConcurrentHashMap<Method, Object>();
+        Map<Method,Object> result = new ConcurrentHashMap<>();
         for (Entry<Method, Object> each : methodValue.entrySet()) {
             ConfigurationItemUpdateResult updateResult = updated.get(each.getKey());
             if (updateResult == null || !updateResult.isSuccess() || updateResult.getType() != ConfigurationItemUpdateResult.Type.update) {
@@ -209,7 +209,7 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
     }
 
     private boolean shouldMerge(Map<Method, ConfigurationItemUpdateResult> updated) {
-        List<String> notFound = new ArrayList<String>();
+        List<String> notFound = new ArrayList<>();
         for (Entry<Method, Object> each : methodValue.entrySet()) {
             if (updated.get(each.getKey()) == null) {
                 notFound.add(msg.format("error.retrieving.item", getName(), each.getKey()));
@@ -226,9 +226,9 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
 
     private void sync(Class<? extends RuntimeException> cls) {
         LoggerHolder.getLog().info(msg.format("sync.start", getName()));
-        List<ConfigurationUpdater> toExecute = new ArrayList<ConfigurationUpdater>();
+        List<ConfigurationUpdater> toExecute = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(data.getAll().size());
-        Map<Method, ConfigurationItemUpdateResult> updateAtomic = new ConcurrentHashMap<Method, ConfigurationItemUpdateResult>();
+        Map<Method, ConfigurationItemUpdateResult> updateAtomic = new ConcurrentHashMap<>();
 
         try {
             for (MethodConfiguration config : data.getAll()) {
@@ -254,13 +254,7 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
                 constructor.setAccessible(true);
                 throw cls.cast(constructor.newInstance(error));
 
-            } catch (NoSuchMethodException ignored) {
-                throw new UpdateConfigurationRepositoryException(error);
-            } catch (InvocationTargetException ignored) {
-                throw new UpdateConfigurationRepositoryException(error);
-            } catch (InstantiationException ignored) {
-                throw new UpdateConfigurationRepositoryException(error);
-            } catch (IllegalAccessException ignored) {
+            } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException ignored) {
                 throw new UpdateConfigurationRepositoryException(error);
             }
         }
@@ -270,7 +264,7 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
     }
 
     private void finishSync(Map<Method, ConfigurationItemUpdateResult> updateAtomic) {
-        Map<Method,Object> mergedAtomic = new ConcurrentHashMap<Method, Object>();
+        Map<Method,Object> mergedAtomic = new ConcurrentHashMap<>();
         for (Entry<Method, Object> each : methodValue.entrySet()) {
             mergedAtomic.put(each.getKey(), (!updateAtomic.containsKey(each.getKey()) ? each.getValue() : updateAtomic.get(each.getKey()).getObject()));
         }

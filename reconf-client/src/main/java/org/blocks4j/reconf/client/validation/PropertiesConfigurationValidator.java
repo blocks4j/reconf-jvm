@@ -23,7 +23,7 @@ import org.blocks4j.reconf.client.setup.PropertiesConfiguration;
 public class PropertiesConfigurationValidator {
 
     public static Set<String> validate(PropertiesConfiguration arg) {
-        Set<String> errors = new LinkedHashSet<String>();
+        Set<String> errors = new LinkedHashSet<>();
 
         checkLocalCacheSettings(arg, errors);
         checkConnectionSettings(arg, errors);

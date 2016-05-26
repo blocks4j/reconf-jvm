@@ -79,7 +79,7 @@ public class ConfigurationRepositoryElementFactory {
             return;
         }
 
-        List<String> errors = new ArrayList<String>();
+        List<String> errors = new ArrayList<>();
         int i = 1;
         for (Entry<String, String> violation : violations.entrySet()) {
             errors.add(i++ + " - " + violation.getValue() + " @ " + StringUtils.replace(arg.getInterfaceClass().toString(), "interface ", "") + "." + violation.getKey());

@@ -38,8 +38,8 @@ public class DatabaseURL {
     private static final String driverClassName = "org.hsqldb.jdbc.JDBCDriver";
 
     private String location;
-    private Map<String, String> initialParams = new LinkedHashMap<String, String>();
-    private Map<String, String> runtimeParams = new LinkedHashMap<String, String>();
+    private Map<String, String> initialParams = new LinkedHashMap<>();
+    private Map<String, String> runtimeParams = new LinkedHashMap<>();
 
     private static final String cryptKey;
 
@@ -143,7 +143,7 @@ public class DatabaseURL {
     }
 
     private String buildString(Map<String, String> params) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (Entry<String, String> each : params.entrySet()) {
             result.add(each.getKey() + "=" + each.getValue());
         }

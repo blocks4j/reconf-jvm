@@ -50,7 +50,7 @@ public class SimpleConstructorNumberTest {
     public void test_positive_int() throws Throwable {
         data = new MethodData(intMethod, intMethod.getReturnType(), "'1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Integer(1), o);
+        Assert.assertEquals(1, o);
         Assert.assertEquals(1, o);
     }
 
@@ -58,7 +58,7 @@ public class SimpleConstructorNumberTest {
     public void test_negative_int() throws Throwable {
         data = new MethodData(intMethod, intMethod.getReturnType(), "'-1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Integer(-1), o);
+        Assert.assertEquals(-1, o);
         Assert.assertEquals(-1, o);
     }
 
@@ -66,7 +66,7 @@ public class SimpleConstructorNumberTest {
     public void test_untrimmed_int() throws Throwable {
         data = new MethodData(intMethod, intMethod.getReturnType(), "' 1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Integer(1), o);
+        Assert.assertEquals(1, o);
         Assert.assertEquals(1, o);
     }
 
@@ -81,7 +81,7 @@ public class SimpleConstructorNumberTest {
     public void test_positive_long() throws Throwable {
         data = new MethodData(longMethod, longMethod.getReturnType(), "'1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Long(1), o);
+        Assert.assertEquals(1L, o);
         Assert.assertEquals(1L, o);
     }
 
@@ -89,7 +89,7 @@ public class SimpleConstructorNumberTest {
     public void test_negative_long() throws Throwable {
         data = new MethodData(longMethod, longMethod.getReturnType(), "'-1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Long(-1), o);
+        Assert.assertEquals((long) -1, o);
         Assert.assertEquals(-1L, o);
     }
 
@@ -97,7 +97,7 @@ public class SimpleConstructorNumberTest {
     public void test_untrimmed_long() throws Throwable {
         data = new MethodData(longMethod, longMethod.getReturnType(), "'1 '");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Long(1), o);
+        Assert.assertEquals(1L, o);
         Assert.assertEquals(1L, o);
     }
 
@@ -112,7 +112,7 @@ public class SimpleConstructorNumberTest {
     public void test_positive_byte() throws Throwable {
         data = new MethodData(byteMethod, byteMethod.getReturnType(), "'1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Byte((byte) 1), o);
+        Assert.assertEquals((byte) 1, o);
         Assert.assertEquals((byte) 1, o);
     }
 
@@ -120,7 +120,7 @@ public class SimpleConstructorNumberTest {
     public void test_negative_byte() throws Throwable {
         data = new MethodData(byteMethod, byteMethod.getReturnType(), "'-1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Byte((byte) -1), o);
+        Assert.assertEquals((byte) -1, o);
         Assert.assertEquals((byte) -1, o);
     }
 
@@ -128,7 +128,7 @@ public class SimpleConstructorNumberTest {
     public void test_untrimmed_byte() throws Throwable {
         data = new MethodData(byteMethod, byteMethod.getReturnType(), "' 1 '");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Byte((byte) 1), o);
+        Assert.assertEquals((byte) 1, o);
         Assert.assertEquals((byte) 1, o);
     }
 
@@ -143,7 +143,7 @@ public class SimpleConstructorNumberTest {
     public void test_positive_short() throws Throwable {
         data = new MethodData(shortMethod, shortMethod.getReturnType(), "'1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Short((short) 1), o);
+        Assert.assertEquals((short) 1, o);
         Assert.assertEquals((short) 1, o);
     }
 
@@ -151,7 +151,7 @@ public class SimpleConstructorNumberTest {
     public void test_negative_short() throws Throwable {
         data = new MethodData(shortMethod, shortMethod.getReturnType(), "'-1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Short((short) -1), o);
+        Assert.assertEquals((short) -1, o);
         Assert.assertEquals((short) -1, o);
     }
 
@@ -159,7 +159,7 @@ public class SimpleConstructorNumberTest {
     public void test_untrimmed_short() throws Throwable {
         data = new MethodData(shortMethod, shortMethod.getReturnType(), "'    1    '");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Short((short) 1), o);
+        Assert.assertEquals((short) 1, o);
         Assert.assertEquals((short) 1, o);
     }
 }

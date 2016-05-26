@@ -26,7 +26,7 @@ public class LocalCacheSettingsValidator {
     private static final MessagesBundle msg = MessagesBundle.getBundle(LocalCacheSettings.class);
 
     public static Set<String> validate(LocalCacheSettings arg) {
-        Set<String> errors = new LinkedHashSet<String>();
+        Set<String> errors = new LinkedHashSet<>();
         if (arg == null) {
             errors.add(msg.get("null"));
             return errors;

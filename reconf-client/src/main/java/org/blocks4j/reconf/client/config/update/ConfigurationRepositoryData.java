@@ -26,8 +26,8 @@ import org.blocks4j.reconf.client.proxy.MethodConfiguration;
 public class ConfigurationRepositoryData {
 
     private final ConfigurationRepositoryElement cfgRepository;
-    private final List<MethodConfiguration> atomicReload = new ArrayList<MethodConfiguration>();
-    private final List<MethodConfiguration> all = new ArrayList<MethodConfiguration>();
+    private final List<MethodConfiguration> atomicReload = new ArrayList<>();
+    private final List<MethodConfiguration> all = new ArrayList<>();
     private final ServiceLocator locator;
 
     public ConfigurationRepositoryData(ConfigurationRepositoryElement arg, ServiceLocator locator) {
@@ -45,10 +45,10 @@ public class ConfigurationRepositoryData {
     }
 
     public List<MethodConfiguration> getAtomicReload() {
-        return new ArrayList<MethodConfiguration>(atomicReload);
+        return new ArrayList<>(atomicReload);
     }
 
     public List<MethodConfiguration> getAll() {
-        return new ArrayList<MethodConfiguration>(all);
+        return new ArrayList<>(all);
     }
 }

@@ -49,14 +49,11 @@ public class AdminServlet extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setHeader("Cache-Control", "must-revalidate,no-cache,no-store");
         resp.setContentType(CONTENT_TYPE);
-        PrintWriter writer = resp.getWriter();
 
-        try {
+        try (PrintWriter writer = resp.getWriter()) {
             resp.setContentType(CONTENT_TYPE);
             writer.println(String.format(BODY_TEMPLATE, "ReConf Operational Menu", path, "sync", path + syncUri));
 
-        } finally {
-            writer.close();
         }
     }
 

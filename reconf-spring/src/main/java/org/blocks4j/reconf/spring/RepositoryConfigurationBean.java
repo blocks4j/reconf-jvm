@@ -27,7 +27,7 @@ public class RepositoryConfigurationBean implements FactoryBean {
 
     private Class<?> configInterface;
     private Customization customization = new Customization();
-    private Collection<ConfigurationItemListener> configurationItemListeners = new ArrayList<ConfigurationItemListener>();
+    private Collection<ConfigurationItemListener> configurationItemListeners = new ArrayList<>();
 
     public Object getObject() throws Exception {
         return ConfigurationRepositoryFactory.get(getConfigInterface(), getCustomization(), configurationItemListeners);

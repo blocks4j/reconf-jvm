@@ -9,7 +9,7 @@ public class ReconfServerMemoryDatabase {
     private Map<String, String> database;
 
     public ReconfServerMemoryDatabase() {
-        this.database = new HashMap<String, String>();
+        this.database = new HashMap<>();
     }
 
     public Map<String, String> getDatabase() {

@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class PropertiesConfigurationParser {
 
     private String prefix;
-    private Map<String, String> properties = new LinkedHashMap<String, String>();
+    private Map<String, String> properties = new LinkedHashMap<>();
     private String locale;
     private boolean experimentalFeatures;
     private boolean debugEnabled;

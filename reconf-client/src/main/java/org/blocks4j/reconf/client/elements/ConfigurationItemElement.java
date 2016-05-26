@@ -41,7 +41,7 @@ public class ConfigurationItemElement {
     private Class<? extends ConfigurationAdapter> adapter;
 
     public static List<ConfigurationItemElement> from(ConfigurationRepositoryElement repository) {
-        List<ConfigurationItemElement> result = new ArrayList<ConfigurationItemElement>();
+        List<ConfigurationItemElement> result = new ArrayList<>();
 
         for (Method method : repository.getInterfaceClass().getMethods()) {
             if (Modifier.isAbstract(method.getModifiers())) {

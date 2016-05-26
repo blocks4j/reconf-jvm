@@ -44,7 +44,7 @@ public class InputStreamReader {
             return Collections.EMPTY_LIST;
         }
 
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
         try {
             lines.addAll(IOUtils.readLines(is));
 

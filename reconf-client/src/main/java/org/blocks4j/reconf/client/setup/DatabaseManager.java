@@ -293,7 +293,7 @@ public class DatabaseManager implements ShutdownBean {
     }
 
     private Collection<String> toUpper(Collection<String> arg) {
-        Set<String> result = new LinkedHashSet<String>();
+        Set<String> result = new LinkedHashSet<>();
         for (String str : arg) {
             result.add("'" + StringUtils.upperCase(str) + "'");
         }

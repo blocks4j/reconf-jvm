@@ -24,7 +24,7 @@ public class ReconfSyncEndpoint extends AbstractEndpoint<String> {
     public String invoke() {
         List<SyncResult> result = Environment.syncActiveConfigurationRepositoryUpdaters();
 
-        List<String> syncResultMessage = new ArrayList<String>();
+        List<String> syncResultMessage = new ArrayList<>();
         for (SyncResult syncResult : result) {
             if (syncResult == null) {
                 continue;

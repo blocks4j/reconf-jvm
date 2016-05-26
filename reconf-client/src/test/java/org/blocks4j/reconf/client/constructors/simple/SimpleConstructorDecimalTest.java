@@ -46,7 +46,7 @@ public class SimpleConstructorDecimalTest {
     public void test_positive_double() throws Throwable {
         data = new MethodData(doubleMethod, doubleMethod.getReturnType(), "'1.00000'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Double(1), o);
+        Assert.assertEquals(1d, o);
         Assert.assertEquals(1D, o);
     }
 
@@ -54,7 +54,7 @@ public class SimpleConstructorDecimalTest {
     public void test_negative_double() throws Throwable {
         data = new MethodData(doubleMethod, doubleMethod.getReturnType(), "'-1.0'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Double(-1), o);
+        Assert.assertEquals((double) -1, o);
         Assert.assertEquals(-1D, o);
     }
 
@@ -62,7 +62,7 @@ public class SimpleConstructorDecimalTest {
     public void test_untrimmed_double() throws Throwable {
         data = new MethodData(doubleMethod, doubleMethod.getReturnType(), "' 1.00000 '");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Double(1), o);
+        Assert.assertEquals(1d, o);
         Assert.assertEquals(1D, o);
     }
 
@@ -77,7 +77,7 @@ public class SimpleConstructorDecimalTest {
     public void test_positive_float() throws Throwable {
         data = new MethodData(floatMethod, floatMethod.getReturnType(), "'1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Float(1), o);
+        Assert.assertEquals(1f, o);
         Assert.assertEquals(1F, o);
     }
 
@@ -85,7 +85,7 @@ public class SimpleConstructorDecimalTest {
     public void test_negative_float() throws Throwable {
         data = new MethodData(floatMethod, floatMethod.getReturnType(), "'-1'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Float(-1), o);
+        Assert.assertEquals((float) -1, o);
         Assert.assertEquals(-1F, o);
     }
 
@@ -93,7 +93,7 @@ public class SimpleConstructorDecimalTest {
     public void test_untrimmed_float() throws Throwable {
         data = new MethodData(floatMethod, floatMethod.getReturnType(), "' 1.00000 '");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Float(1), o);
+        Assert.assertEquals(1f, o);
         Assert.assertEquals(1F, o);
     }
 }

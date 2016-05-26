@@ -31,7 +31,7 @@ public class ConnectionSettingsValidator {
     private static final MessagesBundle msg = MessagesBundle.getBundle(ConnectionSettings.class);
 
     public static Set<String> validate(ConnectionSettings arg) {
-        Set<String> errors = new LinkedHashSet<String>();
+        Set<String> errors = new LinkedHashSet<>();
         if (arg == null) {
             errors.add(msg.get("null"));
             return errors;

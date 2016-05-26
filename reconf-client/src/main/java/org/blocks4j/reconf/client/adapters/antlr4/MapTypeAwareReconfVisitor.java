@@ -35,7 +35,7 @@ public class MapTypeAwareReconfVisitor extends ReconfBaseVisitor<Map<Object, Obj
 
     @Override
     public Map<Object, Object> visitMapEntry(ReconfParser.MapEntryContext ctx) {
-        Map<Object, Object> entry = new HashMap<Object, Object>();
+        Map<Object, Object> entry = new HashMap<>();
 
         Object key = new TypeAwareReconfVisitor(keyType).visitPrimitive(ctx.primitive());
         Object value = new TypeAwareReconfVisitor(valueType).visitValue(ctx.value());

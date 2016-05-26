@@ -43,8 +43,8 @@ public class ConfigurationRepositoryFactory implements InvocationHandler {
     private ConfigurationRepositoryUpdater updater;
     private static ConfigurationRepositoryElementFactory factory;
     private static final ReentrantLock lock = new ReentrantLock();
-    private static ConcurrentMap<String, Object> cache = new ConcurrentHashMap<String, Object>();
-    private static ConcurrentMap<String, Collection<? extends ConfigurationItemListener>> listenerCache = new ConcurrentHashMap<String, Collection<? extends ConfigurationItemListener>>();
+    private static ConcurrentMap<String, Object> cache = new ConcurrentHashMap<>();
+    private static ConcurrentMap<String, Collection<? extends ConfigurationItemListener>> listenerCache = new ConcurrentHashMap<>();
 
     public static synchronized <T> T get(Class<T> arg) {
         return get(arg, null, null);

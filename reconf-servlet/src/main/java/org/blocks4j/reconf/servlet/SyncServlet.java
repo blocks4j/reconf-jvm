@@ -39,13 +39,12 @@ public class SyncServlet extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setHeader("Cache-Control", "must-revalidate,no-cache,no-store");
         resp.setContentType(AdminServlet.getContentType());
-        PrintWriter writer = resp.getWriter();
 
-        try {
+        try (PrintWriter writer = resp.getWriter()) {
             String path = req.getContextPath() + req.getServletPath();
             List<SyncResult> result = Environment.syncActiveConfigurationRepositoryUpdaters();
 
-            List<String> syncResultMessage = new ArrayList<String>();
+            List<String> syncResultMessage = new ArrayList<>();
             for (SyncResult syncResult : result) {
                 if (syncResult == null) {
                     continue;
@@ -55,8 +54,6 @@ public class SyncServlet extends HttpServlet {
 
             writer.println(String.format(BODY_TEMPLATE, "ReConf Sync Result", path + DEFAULT_URI, StringUtils.join(syncResultMessage, ", ")));
 
-        } finally {
-            writer.close();
         }
     }
 

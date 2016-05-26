@@ -35,7 +35,7 @@ public class ConfigurationItemElementValidator {
             return Collections.emptyMap();
         }
 
-        Map<String, String> errors = new LinkedHashMap<String, String>();
+        Map<String, String> errors = new LinkedHashMap<>();
         String prefix = getPrefix(pos);
         checkMethodName(prefix, arg, errors);
         checkValue(prefix, arg, errors);

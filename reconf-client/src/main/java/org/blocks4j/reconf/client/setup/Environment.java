@@ -142,7 +142,7 @@ public class Environment {
         if (CollectionUtils.isEmpty(violations)) {
             return;
         }
-        List<String> errors = new ArrayList<String>();
+        List<String> errors = new ArrayList<>();
         int i = 1;
         for (String violation : violations) {
             errors.add(i++ + " - " + violation);
@@ -176,7 +176,7 @@ public class Environment {
 
     public static List<SyncResult> syncActiveConfigurationRepositoryUpdaters() {
         List<ObservableThread> toSync = checker.getActiveThreads();
-        List<SyncResult> result = new ArrayList<SyncResult>();
+        List<SyncResult> result = new ArrayList<>();
 
         for (ObservableThread thread : toSync) {
             if (!(thread instanceof ConfigurationRepositoryUpdater)) {

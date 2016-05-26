@@ -27,7 +27,7 @@ import org.blocks4j.reconf.infra.log.LoggerHolder;
 public class ObserverThread extends Thread {
 
     private static final MessagesBundle msg = MessagesBundle.getBundle(ObserverThread.class);
-    private CopyOnWriteArrayList<ObservableThread> toWatch = new CopyOnWriteArrayList<ObservableThread>();
+    private CopyOnWriteArrayList<ObservableThread> toWatch = new CopyOnWriteArrayList<>();
 
     public ObserverThread() {
         setName("reconf-thread-checker");
@@ -40,10 +40,10 @@ public class ObserverThread extends Thread {
             try {
                 TimeUnit.MINUTES.sleep(1);
                 LoggerHolder.getLog().debug(msg.format("start", getName()));
-                List<ObservableThread> threads = new ArrayList<ObservableThread>(toWatch);
+                List<ObservableThread> threads = new ArrayList<>(toWatch);
 
-                List<ObservableThread> toRemove = new ArrayList<ObservableThread>();
-                List<ObservableThread> toAdd = new ArrayList<ObservableThread>();
+                List<ObservableThread> toRemove = new ArrayList<>();
+                List<ObservableThread> toAdd = new ArrayList<>();
 
                 for (ObservableThread thread : threads) {
                     if (System.currentTimeMillis() - thread.getLastExecution() > (1.5F * thread.getReloadTimeUnit().toMillis(thread.getReloadRate()))) {
@@ -83,6 +83,6 @@ public class ObserverThread extends Thread {
     }
 
     public List<ObservableThread> getActiveThreads() {
-        return new ArrayList<ObservableThread>(toWatch);
+        return new ArrayList<>(toWatch);
     }
 }

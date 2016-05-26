@@ -37,10 +37,10 @@ public class ConfigurationRepositoryElement {
     private String component;
     private Integer rate;
     private TimeUnit timeUnit;
-    private Collection<ConfigurationItemListener> configurationItemListeners = new ArrayList<ConfigurationItemListener>();
+    private Collection<ConfigurationItemListener> configurationItemListeners = new ArrayList<>();
 
     private Class<?> interfaceClass;
-    private List<ConfigurationItemElement> configurationItems = new ArrayList<ConfigurationItemElement>();
+    private List<ConfigurationItemElement> configurationItems = new ArrayList<>();
     private Customization customization;
 
     public ConnectionSettings getConnectionSettings() {
@@ -58,7 +58,7 @@ public class ConfigurationRepositoryElement {
     }
 
     public Collection<String> getFullProperties() {
-        Set<String> result = new LinkedHashSet<String>();
+        Set<String> result = new LinkedHashSet<>();
         for (ConfigurationItemElement elem : configurationItems) {
             String productName = null;
             if (StringUtils.isEmpty(elem.getProduct())) {
@@ -143,7 +143,7 @@ public class ConfigurationRepositoryElement {
         .append("pollingRate", getRate())
         .append("pollingTimeUnit", getTimeUnit());
         if (!configurationItemListeners.isEmpty()) {
-            List<ConfigurationItemListener> asList = new ArrayList<ConfigurationItemListener>(configurationItemListeners);
+            List<ConfigurationItemListener> asList = new ArrayList<>(configurationItemListeners);
             for (int i = 0; i < asList.size(); i++) {
                 result.append("item-listener-" + (i+1), asList.get(i).getClass().getName());
             }

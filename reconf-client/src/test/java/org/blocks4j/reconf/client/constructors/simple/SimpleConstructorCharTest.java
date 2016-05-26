@@ -44,7 +44,7 @@ public class SimpleConstructorCharTest {
     public void test_normal_char() throws Throwable {
         data = new MethodData(method, method.getReturnType(), "'t'");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Character('t'), o);
+        Assert.assertEquals('t', o);
         Assert.assertEquals('t', o);
     }
 
@@ -52,7 +52,7 @@ public class SimpleConstructorCharTest {
     public void test_untrimmed_char() throws Throwable {
         data = new MethodData(method, method.getReturnType(), "' t '");
         Object o = new SimpleConstructor().construct(data);
-        Assert.assertEquals(new Character('t'), o);
+        Assert.assertEquals('t', o);
         Assert.assertEquals('t', o);
     }
 }

@@ -33,7 +33,7 @@ public class ConfigurationRepositoryElementValidator {
             return Collections.EMPTY_MAP;
         }
 
-        Map<String, String> errors = new LinkedHashMap<String, String>();
+        Map<String, String> errors = new LinkedHashMap<>();
 
         checkConnectionSettings(arg, errors);
         checkComponent(arg, errors);
