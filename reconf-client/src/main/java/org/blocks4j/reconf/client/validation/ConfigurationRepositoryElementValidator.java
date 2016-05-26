@@ -30,7 +30,7 @@ public class ConfigurationRepositoryElementValidator {
 
     public static Map<String, String> validate(ConfigurationRepositoryElement arg) {
         if (arg == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
 
         Map<String, String> errors = new LinkedHashMap<>();

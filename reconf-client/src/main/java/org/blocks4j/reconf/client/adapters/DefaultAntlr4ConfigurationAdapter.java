@@ -21,7 +21,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.blocks4j.reconf.client.adapters.antlr4.ReconfLexer;
 import org.blocks4j.reconf.client.adapters.antlr4.ReconfParser;
 import org.blocks4j.reconf.client.adapters.antlr4.TypeAwareReconfVisitor;
-import org.blocks4j.reconf.client.constructors.MethodData;
 
 public class DefaultAntlr4ConfigurationAdapter implements ConfigurationAdapter<Object> {
 

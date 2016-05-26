@@ -65,7 +65,7 @@ public class ConfigurationRepositoryFactory implements InvocationHandler {
             customization = new Customization();
         }
         if (configurationItemListeners == null) {
-            configurationItemListeners = Collections.EMPTY_LIST;
+            configurationItemListeners = Collections.emptyList();
         }
 
         String key = arg.getName() + customization;
@@ -98,7 +98,7 @@ public class ConfigurationRepositoryFactory implements InvocationHandler {
 
         Object result = newInstance(arg, repo);
         cache.put(key, result);
-        listenerCache.put(key, ((configurationItemListeners != null) ? configurationItemListeners : CollectionUtils.EMPTY_COLLECTION));
+        listenerCache.put(key, ((configurationItemListeners != null) ? configurationItemListeners : Collections.emptyList()));
         return (T) result;
     }
 

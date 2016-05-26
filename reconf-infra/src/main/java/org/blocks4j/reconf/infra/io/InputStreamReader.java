@@ -15,13 +15,14 @@
  */
 package org.blocks4j.reconf.infra.io;
 
+import org.apache.commons.io.IOUtils;
+import org.blocks4j.reconf.infra.log.LoggerHolder;
+import org.blocks4j.reconf.infra.system.LineSeparator;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
-import org.blocks4j.reconf.infra.log.LoggerHolder;
-import org.blocks4j.reconf.infra.system.LineSeparator;
 
 
 public class InputStreamReader {
@@ -41,12 +42,12 @@ public class InputStreamReader {
 
     public static List<String> readLines(InputStream is) {
         if (null == is) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         List<String> lines = new ArrayList<>();
         try {
-            lines.addAll(IOUtils.readLines(is));
+            lines.addAll(IOUtils.readLines(is, "UTF-8"));
 
         } catch (Exception e) {
             LoggerHolder.getLog().error("error while reading the inputstream", e);

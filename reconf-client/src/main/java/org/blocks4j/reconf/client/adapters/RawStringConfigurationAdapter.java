@@ -16,8 +16,6 @@
 package org.blocks4j.reconf.client.adapters;
 
 
-import org.blocks4j.reconf.client.constructors.MethodData;
-
 public class RawStringConfigurationAdapter implements ConfigurationAdapter<String> {
 
     public String adapt(MethodData methodData) {

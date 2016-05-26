@@ -15,19 +15,7 @@
  */
 package org.blocks4j.reconf.client.setup;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +25,14 @@ import org.blocks4j.reconf.infra.shutdown.ShutdownBean;
 import org.blocks4j.reconf.infra.shutdown.ShutdownInterceptor;
 import org.blocks4j.reconf.infra.system.FileSeparator;
 import org.blocks4j.reconf.infra.throwables.ReConfInitializationError;
+
+import java.io.File;
+import java.lang.reflect.Method;
+import java.sql.*;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 
 public class DatabaseManager implements ShutdownBean {
@@ -121,10 +117,10 @@ public class DatabaseManager implements ShutdownBean {
             conn = getConnection();
             stmt = conn.createStatement();
             stmt.execute("SELECT 1                                 " +
-                         "FROM   INFORMATION_SCHEMA.TABLES         " +
-                         "WHERE  TABLE_CATALOG = 'PUBLIC'          " +
-                         "AND    TABLE_SCHEMA = 'PUBLIC'           " +
-                         "AND    TABLE_NAME='CLS_METHOD_PROP_VALUE'");
+                    "FROM   INFORMATION_SCHEMA.TABLES         " +
+                    "WHERE  TABLE_CATALOG = 'PUBLIC'          " +
+                    "AND    TABLE_SCHEMA = 'PUBLIC'           " +
+                    "AND    TABLE_NAME='CLS_METHOD_PROP_VALUE'");
             return stmt.getResultSet().next();
 
         } finally {
@@ -141,10 +137,10 @@ public class DatabaseManager implements ShutdownBean {
         try {
             conn = getConnection();
             stmt = conn.prepareStatement("SELECT VALUE                        " +
-                                         "FROM   PUBLIC.CLS_METHOD_PROP_VALUE " +
-                                         "WHERE  FULL_PROP = ?                " +
-                                         "AND    NAM_CLASS = ?                " +
-                                         "AND    NAM_METHOD = ?               ");
+                    "FROM   PUBLIC.CLS_METHOD_PROP_VALUE " +
+                    "WHERE  FULL_PROP = ?                " +
+                    "AND    NAM_CLASS = ?                " +
+                    "AND    NAM_METHOD = ?               ");
 
             stmt.setString(1, StringUtils.upperCase(fullProperty));
             stmt.setString(2, method.getDeclaringClass().getName());
@@ -245,10 +241,10 @@ public class DatabaseManager implements ShutdownBean {
         try {
             conn = getConnection();
             stmt = conn.prepareStatement("SELECT 1                            " +
-                                         "FROM   PUBLIC.CLS_METHOD_PROP_VALUE " +
-                                         "WHERE  FULL_PROP = ?                " +
-                                         "AND    NAM_CLASS = ?                " +
-                                         "AND    NAM_METHOD = ?               ");
+                    "FROM   PUBLIC.CLS_METHOD_PROP_VALUE " +
+                    "WHERE  FULL_PROP = ?                " +
+                    "AND    NAM_CLASS = ?                " +
+                    "AND    NAM_METHOD = ?               ");
 
             stmt.setString(1, StringUtils.upperCase(fullProperty));
             stmt.setString(2, method.getDeclaringClass().getName());
@@ -348,21 +344,24 @@ public class DatabaseManager implements ShutdownBean {
         if (null == arg) return;
         try {
             arg.close();
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 
     public static void close(ResultSet arg) {
         if (null == arg) return;
         try {
             arg.close();
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 
     public static void close(Connection arg) {
         if (null == arg) return;
         try {
             arg.close();
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 
     private Connection getConnection() throws SQLException {
@@ -395,10 +394,10 @@ public class DatabaseManager implements ShutdownBean {
         ds.setUrl(arg.buildRuntimeURL());
         ds.setUsername(arg.getLogin());
         ds.setPassword(arg.getPass());
-        ds.setMaxActive(30);
+        ds.setMaxTotal(30);
         ds.setMinIdle(5);
         ds.setTestOnBorrow(true);
-        ds.setMaxWait(5000);
+        ds.setMaxWaitMillis(TimeUnit.SECONDS.toMillis(5));
         return ds;
     }
 

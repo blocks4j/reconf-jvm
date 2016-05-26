@@ -18,7 +18,6 @@ package org.blocks4j.reconf.client.adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.blocks4j.reconf.client.constructors.MethodData;
 
 public class GsonConfigurationAdapter implements ConfigurationAdapter<Object> {
 

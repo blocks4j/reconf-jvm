@@ -18,7 +18,7 @@ package org.blocks4j.reconf.client.config.update;
 import org.apache.commons.lang3.StringUtils;
 import org.blocks4j.reconf.client.check.ObservableThread;
 import org.blocks4j.reconf.client.config.source.ConfigurationSource;
-import org.blocks4j.reconf.client.constructors.MethodData;
+import org.blocks4j.reconf.client.adapters.MethodData;
 import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
 import org.blocks4j.reconf.client.proxy.MethodConfiguration;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
@@ -159,7 +159,7 @@ public abstract class ConfigurationUpdater extends ObservableThread {
 
     @Override
     public List<ObservableThread> getChildren() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override

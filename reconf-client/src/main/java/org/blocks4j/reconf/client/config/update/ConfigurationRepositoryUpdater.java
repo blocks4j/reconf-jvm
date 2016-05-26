@@ -50,7 +50,7 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
     private Map<Method, Object> methodValue = new ConcurrentHashMap<>();
     private final ConfigurationRepositoryFactory factory;
     private ServiceLocator locator;
-    private Collection<ConfigurationItemListener> listeners = Collections.EMPTY_LIST;
+    private Collection<ConfigurationItemListener> listeners = Collections.emptyList();
 
     public ConfigurationRepositoryUpdater(ConfigurationRepositoryElement elem, ServiceLocator locator, ConfigurationRepositoryFactory factory) {
         setDaemon(true);
@@ -303,6 +303,6 @@ public class ConfigurationRepositoryUpdater extends ObservableThread {
 
     @Override
     public List<ObservableThread> getChildren() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 }

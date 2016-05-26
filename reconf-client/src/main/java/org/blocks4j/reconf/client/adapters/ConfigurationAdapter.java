@@ -15,10 +15,8 @@
  */
 package org.blocks4j.reconf.client.adapters;
 
-import org.blocks4j.reconf.client.constructors.MethodData;
-
 public interface ConfigurationAdapter<T> {
-    ConfigurationAdapter<?> defaultConfigurationAdapter = new DefaultConfigurationAdapter();
+    ConfigurationAdapter<?> defaultConfigurationAdapter = new DefaultAntlr4ConfigurationAdapter();
 
     T adapt(MethodData methodData);
 }

@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.blocks4j.reconf.client.constructors;
+package org.blocks4j.reconf.client.adapters;
 
 import org.blocks4j.reconf.client.adapters.ConfigurationAdapter;
 

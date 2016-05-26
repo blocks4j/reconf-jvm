@@ -19,7 +19,6 @@ package org.blocks4j.reconf.client.adapters;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import org.blocks4j.reconf.client.constructors.MethodData;
 
 import java.io.IOException;
 
