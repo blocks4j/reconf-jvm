@@ -15,14 +15,16 @@
  */
 package org.blocks4j.reconf.client.config.update;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.lang.reflect.Method;
 import java.util.Collection;
-import org.apache.commons.collections4.CollectionUtils;
 
 public class ConfigurationItemUpdateResult {
 
-    public enum Type { update, noChange, error }
-    public enum Source { server, localCache }
+    public enum Type {update, noChange, error}
+
+    public enum Source {server, localCache}
 
     private boolean success;
     private Type type;
@@ -36,7 +38,8 @@ public class ConfigurationItemUpdateResult {
     private Throwable error;
     private Source source;
 
-    private ConfigurationItemUpdateResult() { }
+    private ConfigurationItemUpdateResult() {
+    }
 
     public Object getObject() {
         return object;
@@ -76,6 +79,10 @@ public class ConfigurationItemUpdateResult {
 
     public boolean isSuccess() {
         return success;
+    }
+
+    public boolean isFailure() {
+        return !this.isSuccess();
     }
 
     public Source getSource() {

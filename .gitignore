@@ -19,6 +19,10 @@ reconf-spring-boot-actuator/.settings/*
 reconf-spring-boot-actuator/target/*
 reconf-spring-boot-actuator/.classpath
 reconf-spring-boot-actuator/.project
+reconf-api/.settings/*
+reconf-api/target/*
+reconf-api/.classpath
+reconf-api/.project
 **/*.iml
 **/.idea/**
 reconf-servlet/.settings/org.eclipse.core.resources.prefs

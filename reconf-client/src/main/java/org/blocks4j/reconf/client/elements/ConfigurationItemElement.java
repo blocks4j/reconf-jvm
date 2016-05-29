@@ -18,9 +18,10 @@ package org.blocks4j.reconf.client.elements;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.blocks4j.reconf.client.adapters.ConfigurationAdapter;
-import org.blocks4j.reconf.client.annotations.ConfigurationItem;
-import org.blocks4j.reconf.client.annotations.UpdateConfigurationRepository;
+import org.blocks4j.reconf.adapter.ConfigurationAdapter;
+import org.blocks4j.reconf.annotations.ConfigurationItem;
+import org.blocks4j.reconf.annotations.UpdateConfigurationRepository;
+import org.blocks4j.reconf.client.adapter.DefaultAntlr4ConfigurationAdapter;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 import org.blocks4j.reconf.infra.throwables.ReConfInitializationError;
 
@@ -41,7 +42,7 @@ public class ConfigurationItemElement {
     private Class<? extends ConfigurationAdapter> adapter;
 
     public static List<ConfigurationItemElement> from(ConfigurationRepositoryElement repository) {
-        List<ConfigurationItemElement> result = new ArrayList<>();
+        List<ConfigurationItemElement> result = new ArrayList<ConfigurationItemElement>();
 
         for (Method method : repository.getInterfaceClass().getMethods()) {
             if (Modifier.isAbstract(method.getModifiers())) {
@@ -59,7 +60,7 @@ public class ConfigurationItemElement {
     }
 
     private static void checkAnnotations(Method method) {
-        if (! (method.isAnnotationPresent(ConfigurationItem.class) || method.isAnnotationPresent(UpdateConfigurationRepository.class))) {
+        if (!(method.isAnnotationPresent(ConfigurationItem.class) || method.isAnnotationPresent(UpdateConfigurationRepository.class))) {
             throw new ReConfInitializationError(msg.format("error.not.configured.method", method.toString()));
         }
     }
@@ -76,7 +77,7 @@ public class ConfigurationItemElement {
         if (resultItem == null) {
             resultItem = new ConfigurationItemElement();
             resultItem.setMethodName(method.getName());
-            resultItem.setAdapter(ann.adapter());
+            resultItem.setAdapter(ann.adapter() == ConfigurationAdapter.class ? DefaultAntlr4ConfigurationAdapter.class : ann.adapter());
             resultItem.setValue(ann.value());
         }
 
@@ -104,6 +105,7 @@ public class ConfigurationItemElement {
     public String getMethodName() {
         return methodName;
     }
+
     public void setMethodName(String methodName) {
         this.methodName = methodName;
     }
@@ -111,6 +113,7 @@ public class ConfigurationItemElement {
     public String getValue() {
         return value;
     }
+
     public void setValue(String value) {
         this.value = value;
     }
@@ -118,6 +121,7 @@ public class ConfigurationItemElement {
     public Class<? extends ConfigurationAdapter> getAdapter() {
         return adapter;
     }
+
     public void setAdapter(Class<? extends ConfigurationAdapter> adapter) {
         this.adapter = adapter;
     }
@@ -125,6 +129,7 @@ public class ConfigurationItemElement {
     public Method getMethod() {
         return method;
     }
+
     public void setMethod(Method method) {
         this.method = method;
     }
@@ -132,6 +137,7 @@ public class ConfigurationItemElement {
     public String getComponent() {
         return component;
     }
+
     public void setComponent(String component) {
         this.component = component;
     }
@@ -139,6 +145,7 @@ public class ConfigurationItemElement {
     public String getProduct() {
         return product;
     }
+
     public void setProduct(String product) {
         this.product = product;
     }

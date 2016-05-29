@@ -15,19 +15,16 @@
  */
 package org.blocks4j.reconf.client.elements;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.blocks4j.reconf.client.notification.ConfigurationItemListener;
-import org.blocks4j.reconf.client.proxy.Customization;
-import org.blocks4j.reconf.client.setup.ConnectionSettings;
+import org.blocks4j.reconf.client.config.update.notification.ConfigurationItemListener;
+import org.blocks4j.reconf.client.customization.Customization;
+import org.blocks4j.reconf.client.setup.config.ConnectionSettings;
 import org.blocks4j.reconf.infra.system.LineSeparator;
+
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class ConfigurationRepositoryElement {
@@ -37,15 +34,17 @@ public class ConfigurationRepositoryElement {
     private String component;
     private Integer rate;
     private TimeUnit timeUnit;
-    private Collection<ConfigurationItemListener> configurationItemListeners = new ArrayList<>();
+    private Collection<ConfigurationItemListener> configurationItemListeners = new ArrayList<ConfigurationItemListener>();
 
     private Class<?> interfaceClass;
-    private List<ConfigurationItemElement> configurationItems = new ArrayList<>();
+    private List<ConfigurationItemElement> configurationItems = new ArrayList<ConfigurationItemElement>();
     private Customization customization;
+
 
     public ConnectionSettings getConnectionSettings() {
         return connectionSettings;
     }
+
     public void setConnectionSettings(ConnectionSettings connectionSettings) {
         this.connectionSettings = connectionSettings;
     }
@@ -53,6 +52,7 @@ public class ConfigurationRepositoryElement {
     public String getComponent() {
         return component;
     }
+
     public void setComponent(String component) {
         this.component = component;
     }
@@ -60,14 +60,14 @@ public class ConfigurationRepositoryElement {
     public Collection<String> getFullProperties() {
         Set<String> result = new LinkedHashSet<>();
         for (ConfigurationItemElement elem : configurationItems) {
-            String productName = null;
+            String productName;
             if (StringUtils.isEmpty(elem.getProduct())) {
                 productName = getProduct();
             } else {
                 productName = elem.getProduct();
             }
 
-            String componentName = null;
+            String componentName;
             if (StringUtils.isEmpty(elem.getComponent())) {
                 componentName = getComponent();
             } else {
@@ -81,6 +81,7 @@ public class ConfigurationRepositoryElement {
     public String getProduct() {
         return product;
     }
+
     public void setProduct(String product) {
         this.product = product;
     }
@@ -88,6 +89,7 @@ public class ConfigurationRepositoryElement {
     public Class<?> getInterfaceClass() {
         return interfaceClass;
     }
+
     public void setInterfaceClass(Class<?> interfaceClass) {
         this.interfaceClass = interfaceClass;
     }
@@ -95,6 +97,7 @@ public class ConfigurationRepositoryElement {
     public List<ConfigurationItemElement> getConfigurationItems() {
         return configurationItems;
     }
+
     public void setConfigurationItems(List<ConfigurationItemElement> configurationItems) {
         this.configurationItems = configurationItems;
     }
@@ -102,6 +105,7 @@ public class ConfigurationRepositoryElement {
     public Customization getCustomization() {
         return customization;
     }
+
     public void setCustomization(Customization customization) {
         this.customization = customization;
     }
@@ -109,6 +113,7 @@ public class ConfigurationRepositoryElement {
     public Integer getRate() {
         return rate;
     }
+
     public void setRate(Integer rate) {
         this.rate = rate;
     }
@@ -116,6 +121,7 @@ public class ConfigurationRepositoryElement {
     public TimeUnit getTimeUnit() {
         return timeUnit;
     }
+
     public void setTimeUnit(TimeUnit timeUnit) {
         this.timeUnit = timeUnit;
     }
@@ -123,11 +129,13 @@ public class ConfigurationRepositoryElement {
     public Collection<ConfigurationItemListener> getConfigurationItemListeners() {
         return configurationItemListeners;
     }
+
     public void setConfigurationItemListeners(Collection<ConfigurationItemListener> configurationItemListeners) {
         if (configurationItemListeners != null) {
             this.configurationItemListeners = configurationItemListeners;
         }
     }
+
     public void addConfigurationItemListener(ConfigurationItemListener configurationItemListener) {
         if (configurationItemListener != null) {
             this.configurationItemListeners.add(configurationItemListener);
@@ -136,16 +144,16 @@ public class ConfigurationRepositoryElement {
 
     @Override
     public String toString() {
-        ToStringBuilder result = new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-        .append("class", getInterfaceClass())
-        .append("product", getProduct())
-        .append("component", getComponent())
-        .append("pollingRate", getRate())
-        .append("pollingTimeUnit", getTimeUnit());
+        ToStringBuilder result = new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("class", getInterfaceClass())
+                .append("product", getProduct())
+                .append("component", getComponent())
+                .append("pollingRate", getRate())
+                .append("pollingTimeUnit", getTimeUnit());
         if (!configurationItemListeners.isEmpty()) {
             List<ConfigurationItemListener> asList = new ArrayList<>(configurationItemListeners);
             for (int i = 0; i < asList.size(); i++) {
-                result.append("item-listener-" + (i+1), asList.get(i).getClass().getName());
+                result.append("item-listener-" + (i + 1), asList.get(i).getClass().getName());
             }
         }
 

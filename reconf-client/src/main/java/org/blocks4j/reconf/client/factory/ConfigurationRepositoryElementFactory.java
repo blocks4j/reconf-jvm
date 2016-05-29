@@ -15,30 +15,31 @@
  */
 package org.blocks4j.reconf.client.factory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.blocks4j.reconf.client.annotations.ConfigurationRepository;
+import org.blocks4j.reconf.annotations.ConfigurationRepository;
 import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
 import org.blocks4j.reconf.client.elements.ConfigurationRepositoryElement;
-import org.blocks4j.reconf.client.setup.PropertiesConfiguration;
+import org.blocks4j.reconf.client.setup.config.ReconfConfiguration;
 import org.blocks4j.reconf.client.validation.ConfigurationRepositoryElementValidator;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 import org.blocks4j.reconf.infra.log.LoggerHolder;
 import org.blocks4j.reconf.infra.system.LineSeparator;
 import org.blocks4j.reconf.infra.throwables.ReConfInitializationError;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 
 public class ConfigurationRepositoryElementFactory {
 
     private static final MessagesBundle msg = MessagesBundle.getBundle(ConfigurationRepositoryElementFactory.class);
-    private PropertiesConfiguration configuration;
+    private ReconfConfiguration configuration;
 
-    public ConfigurationRepositoryElementFactory(PropertiesConfiguration arg) {
-        this.configuration = arg;
+    public ConfigurationRepositoryElementFactory(ReconfConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     public ConfigurationRepositoryElement create(Class<?> arg) {
@@ -48,8 +49,7 @@ public class ConfigurationRepositoryElementFactory {
     }
 
     private ConfigurationRepositoryElement createNewRepositoryFor(Class<?> arg) {
-
-        if(!arg.isInterface()) {
+        if (!arg.isInterface()) {
             throw new ReConfInitializationError(msg.format("error.is.not.interface", arg.getCanonicalName()));
         }
 
@@ -86,9 +86,9 @@ public class ConfigurationRepositoryElementFactory {
         }
 
         if (configuration.isDebug()) {
-            LoggerHolder.getLog().error(msg.format("error.factory", LineSeparator.value(), StringUtils.join(errors, LineSeparator.value()))+LineSeparator.value());
+            LoggerHolder.getLog().error(msg.format("error.factory", LineSeparator.value(), StringUtils.join(errors, LineSeparator.value())) + LineSeparator.value());
         } else {
-            throw new ReConfInitializationError(msg.format("error.factory", LineSeparator.value(), StringUtils.join(errors, LineSeparator.value()))+LineSeparator.value());
+            throw new ReConfInitializationError(msg.format("error.factory", LineSeparator.value(), StringUtils.join(errors, LineSeparator.value())) + LineSeparator.value());
         }
     }
 }

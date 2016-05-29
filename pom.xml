@@ -306,5 +306,6 @@
         <module>reconf-spring</module>
         <module>reconf-spring-boot-actuator</module>
         <module>reconf-servlet</module>
+        <module>reconf-api</module>
     </modules>
 </project>

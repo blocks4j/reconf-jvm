@@ -15,8 +15,9 @@
  */
 package org.blocks4j.reconf.client.factory;
 
-import java.util.concurrent.TimeUnit;
 import org.blocks4j.reconf.infra.http.ServerStub;
+
+import java.util.concurrent.TimeUnit;
 
 
 public interface ServerStubFactory {

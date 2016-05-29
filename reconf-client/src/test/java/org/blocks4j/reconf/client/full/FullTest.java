@@ -2,24 +2,27 @@ package org.blocks4j.reconf.client.full;
 
 import org.apache.http.HttpHost;
 import org.apache.http.localserver.LocalServerTestBase;
+import org.blocks4j.reconf.client.factory.ConfigurationRepositoryFactory;
 import org.blocks4j.reconf.client.full.simulator.ReconfServerSimulator;
-import org.blocks4j.reconf.client.proxy.ConfigurationRepositoryFactory;
-import org.blocks4j.reconf.client.setup.Environment;
+import org.blocks4j.reconf.client.setup.config.ConnectionSettings;
+import org.blocks4j.reconf.client.setup.config.LocalCacheSettings;
+import org.blocks4j.reconf.client.setup.config.ReconfConfiguration;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(SeparateClassloaderTestRunner.class)
 public class FullTest extends LocalServerTestBase {
 
     private HttpHost host;
+    private ConfigurationRepositoryFactory configurationRepositoryFactory;
 
     @Before
     @Override
@@ -33,23 +36,27 @@ public class FullTest extends LocalServerTestBase {
         File tempConf = File.createTempFile("reconf", ".properties");
         tempConf.deleteOnExit();
 
+        ReconfConfiguration reconfConfiguration = new ReconfConfiguration();
 
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(tempConf));
-        bufferedWriter.write("server.url=");
-        bufferedWriter.write(String.format("http://%s:%s", host.getHostName(), host.getPort()));
-        bufferedWriter.newLine();
-        bufferedWriter.write("local.cache.location=");
-        bufferedWriter.write(tempConf.getParent() + "/cache" + System.currentTimeMillis());
-        bufferedWriter.flush();
-        bufferedWriter.close();
+        LocalCacheSettings localCacheSettings = new LocalCacheSettings();
+        localCacheSettings.setBackupLocation(tempConf.getParentFile());
+        reconfConfiguration.setLocalCacheSettings(localCacheSettings);
 
-        System.setProperty(Environment.SYSTEM_PROPERTY, tempConf.getAbsolutePath());
+        ConnectionSettings connectionSettings = new ConnectionSettings();
+        connectionSettings.setUrl(String.format("http://%s:%s", host.getHostName(), host.getPort()));
+
+        reconfConfiguration.setConnectionSettings(connectionSettings);
+
+        this.configurationRepositoryFactory = new ConfigurationRepositoryFactory(reconfConfiguration);
+
+
     }
 
 
     @Test
     public void testTypes() throws Exception {
-        ReconfTest reconfTest = ConfigurationRepositoryFactory.get(ReconfTest.class);
+        ReconfTest reconfTest = this.configurationRepositoryFactory.get(ReconfTest.class);
+
 
         Assert.assertNotNull(reconfTest.getInteger());
         Assert.assertNotNull(reconfTest.getIntegerPrimitive());
@@ -106,5 +113,10 @@ public class FullTest extends LocalServerTestBase {
                 Assert.assertNotNull(stringSetEntry.getValue());
             }
         }
+    }
+
+    @After
+    public void tearDown() throws InterruptedException {
+        this.configurationRepositoryFactory.getEnvironment().shutdown();
     }
 }

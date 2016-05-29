@@ -15,17 +15,25 @@
  */
 package org.blocks4j.reconf.infra.http;
 
-import java.util.concurrent.TimeUnit;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.blocks4j.reconf.infra.http.layer.SimpleHttpRequest;
 import org.blocks4j.reconf.infra.http.layer.SimpleHttpResponse;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 import org.blocks4j.reconf.infra.system.LocalHostname;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
+
 public class ServerStub {
 
     private static final MessagesBundle msg = MessagesBundle.getBundle(ServerStub.class);
     private static final String PROTOCOL = "reconf.client-v1+text/plain";
-    private SimpleHttpDelegatorFactory factory;
     private final String serviceUri;
     private final long timeout;
     private final TimeUnit timeunit;
@@ -34,21 +42,34 @@ public class ServerStub {
     private String component;
     private String instance;
 
-    public ServerStub(String serviceUri, long timeout, TimeUnit timeUnit, int maxRetry) {
-        this(serviceUri, timeout, timeUnit, maxRetry, SimpleHttpDelegatorFactory.defaultImplementation);
-    }
+    private HttpClient httpClient;
 
-    public ServerStub(String serviceUri, long timeout, TimeUnit timeUnit, int maxRetry, SimpleHttpDelegatorFactory factory) {
+    public ServerStub(String serviceUri, long timeout, TimeUnit timeUnit, int maxRetry) {
         this.serviceUri = serviceUri;
         this.timeout = timeout;
         this.timeunit = timeUnit;
         this.instance = LocalHostname.getName();
         this.maxRetry = maxRetry;
-        this.factory = factory;
+
+        this.httpClient = this.createHttpClient(timeout, timeUnit, maxRetry);
+    }
+
+    private HttpClient createHttpClient(long timeout, TimeUnit timeUnit, int maxRetry) {
+        int timeMillis = (int) TimeUnit.MILLISECONDS.convert(timeout, timeUnit);
+        return HttpClientBuilder.create()
+                .setRetryHandler(new RetryHandler(maxRetry))
+                .setDefaultRequestConfig(RequestConfig.custom()
+                        .setCookieSpec(CookieSpecs.IGNORE_COOKIES)
+                        .setConnectTimeout(timeMillis)
+                        .setSocketTimeout(timeMillis)
+                        .setConnectionRequestTimeout(timeMillis)
+                        .build())
+                .build();
+
     }
 
     public String get(String property) throws Exception {
-        final SimpleHttpRequest httpGet = factory.newGetRequest(serviceUri, product, component, property)
+        final HttpGet httpGet = this.newGetRequest(serviceUri, product, component, property)
                 .addQueryParam("instance", instance)
                 .addHeaderField("Accept-Encoding", "gzip,deflate")
                 .addHeaderField("X-ReConf-Protocol", PROTOCOL);
@@ -71,9 +92,30 @@ public class ServerStub {
         throw new IllegalStateException(msg.format("error.http", result.getStatusCode(), httpGet.getURI()));
     }
 
+    private HttpGet newGetRequest(String serviceUri, String... pathParam) {
+        try {
+            URIBuilder baseBuilder = new URIBuilder(serviceUri);
+            if (baseBuilder.getScheme() == null) {
+                baseBuilder = new URIBuilder("http://" + serviceUri);
+            }
+
+            final StringBuilder pathBuilder = new StringBuilder(baseBuilder.getPath());
+            for (String param : pathParam) {
+                pathBuilder.append("/").append(param);
+            }
+
+            URI uri = new URI(baseBuilder.getScheme(), baseBuilder.getUserInfo(), baseBuilder.getHost(), baseBuilder.getPort(), pathBuilder.toString(), null, null);
+
+            return new HttpGet(uri);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     public String getComponent() {
         return component;
     }
+
     public void setComponent(String component) {
         this.component = component;
     }
@@ -81,6 +123,7 @@ public class ServerStub {
     public String getProduct() {
         return product;
     }
+
     public void setProduct(String product) {
         this.product = product;
     }

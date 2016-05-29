@@ -15,17 +15,11 @@
  */
 package org.blocks4j.reconf.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
-import org.blocks4j.reconf.client.setup.Environment;
-import org.blocks4j.reconf.client.setup.SyncResult;
+import java.io.IOException;
 
 public class SyncServlet extends HttpServlet {
 
@@ -36,7 +30,7 @@ public class SyncServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setStatus(HttpServletResponse.SC_OK);
+        /*resp.setStatus(HttpServletResponse.SC_OK);
         resp.setHeader("Cache-Control", "must-revalidate,no-cache,no-store");
         resp.setContentType(AdminServlet.getContentType());
 
@@ -54,7 +48,7 @@ public class SyncServlet extends HttpServlet {
 
             writer.println(String.format(BODY_TEMPLATE, "ReConf Sync Result", path + DEFAULT_URI, StringUtils.join(syncResultMessage, ", ")));
 
-        }
+        }*/
     }
 
     public static String getDefaultURI() {

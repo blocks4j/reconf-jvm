@@ -1,13 +1,7 @@
 package org.blocks4j.reconf.spring.boot.actuator;
 
-import org.apache.commons.lang3.StringUtils;
-import org.blocks4j.reconf.client.setup.Environment;
-import org.blocks4j.reconf.client.setup.SyncResult;
 import org.springframework.boot.actuate.endpoint.AbstractEndpoint;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ConfigurationProperties(prefix = "endpoints.reconf.sync", ignoreUnknownFields = true)
 public class ReconfSyncEndpoint extends AbstractEndpoint<String> {
@@ -22,7 +16,7 @@ public class ReconfSyncEndpoint extends AbstractEndpoint<String> {
 
     @Override
     public String invoke() {
-        List<SyncResult> result = Environment.syncActiveConfigurationRepositoryUpdaters();
+        /*List<SyncResult> result = Environment.syncActiveConfigurationRepositoryUpdaters();
 
         List<String> syncResultMessage = new ArrayList<>();
         for (SyncResult syncResult : result) {
@@ -32,7 +26,8 @@ public class ReconfSyncEndpoint extends AbstractEndpoint<String> {
             syncResultMessage.add(String.format(RESULT_TEMPLATE, syncResult.getName(), syncResult.getThrowable() == null));
         }
 
-        return StringUtils.join(syncResultMessage, ", ");
+        return StringUtils.join(syncResultMessage, ", ");*/
+        return "";
     }
 
 }

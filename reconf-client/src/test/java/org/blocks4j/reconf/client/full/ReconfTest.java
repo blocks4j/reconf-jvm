@@ -1,8 +1,9 @@
 package org.blocks4j.reconf.client.full;
 
-import org.blocks4j.reconf.client.adapters.DefaultAntlr4ConfigurationAdapter;
-import org.blocks4j.reconf.client.annotations.ConfigurationItem;
-import org.blocks4j.reconf.client.annotations.ConfigurationRepository;
+
+import org.blocks4j.reconf.annotations.ConfigurationItem;
+import org.blocks4j.reconf.annotations.ConfigurationRepository;
+import org.blocks4j.reconf.client.adapter.DefaultAntlr4ConfigurationAdapter;
 
 import java.util.List;
 import java.util.Map;

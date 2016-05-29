@@ -15,18 +15,16 @@
  */
 package org.blocks4j.reconf.infra.io;
 
+import org.blocks4j.reconf.infra.log.LoggerHolder;
+
 import java.io.InputStream;
 import java.net.URI;
-import org.blocks4j.reconf.infra.log.LoggerHolder;
 
 
 public class ClasspathInputStream {
 
     public static InputStream from(String arg) {
         URI uri = URI.create(arg);
-        if (null == uri) {
-            return null;
-        }
 
         InputStream is = null;
 
