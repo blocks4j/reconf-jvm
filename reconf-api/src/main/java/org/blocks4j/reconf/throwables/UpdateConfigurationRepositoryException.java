@@ -23,4 +23,8 @@ public class UpdateConfigurationRepositoryException extends RuntimeException {
     public UpdateConfigurationRepositoryException(String msg) {
         super(msg);
     }
+
+    public UpdateConfigurationRepositoryException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

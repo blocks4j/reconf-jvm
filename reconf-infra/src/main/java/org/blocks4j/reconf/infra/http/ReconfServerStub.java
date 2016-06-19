@@ -15,46 +15,39 @@
  */
 package org.blocks4j.reconf.infra.http;
 
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.blocks4j.reconf.infra.http.layer.SimpleHttpRequest;
-import org.blocks4j.reconf.infra.http.layer.SimpleHttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 import org.blocks4j.reconf.infra.system.LocalHostname;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
-public class ServerStub {
+public class ReconfServerStub implements ReconfServer {
 
-    private static final MessagesBundle msg = MessagesBundle.getBundle(ServerStub.class);
+    private static final MessagesBundle msg = MessagesBundle.getBundle(ReconfServerStub.class);
     private static final String PROTOCOL = "reconf.client-v1+text/plain";
     private final String serviceUri;
-    private final long timeout;
-    private final TimeUnit timeunit;
-    private final int maxRetry;
-    private String product;
-    private String component;
     private String instance;
 
-    private HttpClient httpClient;
+    private CloseableHttpClient httpClient;
 
-    public ServerStub(String serviceUri, long timeout, TimeUnit timeUnit, int maxRetry) {
+    public ReconfServerStub(String serviceUri, long timeout, TimeUnit timeUnit, int maxRetry) {
         this.serviceUri = serviceUri;
-        this.timeout = timeout;
-        this.timeunit = timeUnit;
         this.instance = LocalHostname.getName();
-        this.maxRetry = maxRetry;
 
         this.httpClient = this.createHttpClient(timeout, timeUnit, maxRetry);
     }
 
-    private HttpClient createHttpClient(long timeout, TimeUnit timeUnit, int maxRetry) {
+    private CloseableHttpClient createHttpClient(long timeout, TimeUnit timeUnit, int maxRetry) {
         int timeMillis = (int) TimeUnit.MILLISECONDS.convert(timeout, timeUnit);
         return HttpClientBuilder.create()
                 .setRetryHandler(new RetryHandler(maxRetry))
@@ -64,67 +57,59 @@ public class ServerStub {
                         .setSocketTimeout(timeMillis)
                         .setConnectionRequestTimeout(timeMillis)
                         .build())
+                .setMaxConnTotal(50)
+                .setMaxConnPerRoute(50)
                 .build();
 
     }
 
-    public String get(String property) throws Exception {
-        final HttpGet httpGet = this.newGetRequest(serviceUri, product, component, property)
-                .addQueryParam("instance", instance)
-                .addHeaderField("Accept-Encoding", "gzip,deflate")
-                .addHeaderField("X-ReConf-Protocol", PROTOCOL);
+    @Override
+    public String get(String product, String component, String property) throws Exception {
+        final URIBuilder baseURIBuilder = this.createBaseURIBuilder(serviceUri, product, component, property)
+                .setParameter("instance", instance);
+
+        URI requestUri = baseURIBuilder.build();
+        final HttpGet request = new HttpGet(requestUri);
+        request.addHeader("Accept-Encoding", "gzip,deflate");
+        request.addHeader("X-ReConf-Protocol", PROTOCOL);
 
         int status = 0;
-        SimpleHttpResponse result = null;
-        try {
-            result = factory.execute(httpGet, timeout, timeunit, maxRetry);
-            status = result.getStatusCode();
+        try (CloseableHttpResponse httpResponse = this.httpClient.execute(request)) {
+            status = httpResponse.getStatusLine().getStatusCode();
             if (status == 200) {
-                return result.getBodyAsString();
+                return EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
             }
         } catch (Exception e) {
             if (status == 0) {
-                throw new IllegalStateException(msg.format("error.generic", httpGet.getURI()), e);
+                throw new IllegalStateException(msg.format("error.generic", requestUri.toString()), e);
             }
-            throw new IllegalStateException(msg.format("error.http", status, httpGet.getURI()), e);
+            throw new IllegalStateException(msg.format("error.http", status, requestUri.toString()), e);
         }
 
-        throw new IllegalStateException(msg.format("error.http", result.getStatusCode(), httpGet.getURI()));
+        throw new IllegalStateException(msg.format("error.http", status, requestUri.toString()));
     }
 
-    private HttpGet newGetRequest(String serviceUri, String... pathParam) {
+    private URIBuilder createBaseURIBuilder(String serviceUri, String product, String component, String property) {
         try {
             URIBuilder baseBuilder = new URIBuilder(serviceUri);
             if (baseBuilder.getScheme() == null) {
                 baseBuilder = new URIBuilder("http://" + serviceUri);
             }
 
-            final StringBuilder pathBuilder = new StringBuilder(baseBuilder.getPath());
-            for (String param : pathParam) {
-                pathBuilder.append("/").append(param);
-            }
+            baseBuilder.setPath(String.format("/%s/%s/%s", product, component, property));
 
-            URI uri = new URI(baseBuilder.getScheme(), baseBuilder.getUserInfo(), baseBuilder.getHost(), baseBuilder.getPort(), pathBuilder.toString(), null, null);
-
-            return new HttpGet(uri);
+            return baseBuilder;
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-    public String getComponent() {
-        return component;
-    }
-
-    public void setComponent(String component) {
-        this.component = component;
-    }
-
-    public String getProduct() {
-        return product;
-    }
-
-    public void setProduct(String product) {
-        this.product = product;
+    @Override
+    public void shutdown() {
+        try {
+            this.httpClient.close();
+        } catch (IOException e) {
+            throw new IllegalStateException(msg.format("error.http.client.shutdown"));
+        }
     }
 }

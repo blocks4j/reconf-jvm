@@ -14,9 +14,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 @RunWith(SeparateClassloaderTestRunner.class)
 public class FullTest extends LocalServerTestBase {
@@ -33,13 +33,12 @@ public class FullTest extends LocalServerTestBase {
 
         this.host = this.start();
 
-        File tempConf = File.createTempFile("reconf", ".properties");
-        tempConf.deleteOnExit();
+        File tempFolder = Files.createTempDirectory("tests").toFile();
 
         ReconfConfiguration reconfConfiguration = new ReconfConfiguration();
 
         LocalCacheSettings localCacheSettings = new LocalCacheSettings();
-        localCacheSettings.setBackupLocation(tempConf.getParentFile());
+        localCacheSettings.setBackupLocation(tempFolder);
         reconfConfiguration.setLocalCacheSettings(localCacheSettings);
 
         ConnectionSettings connectionSettings = new ConnectionSettings();

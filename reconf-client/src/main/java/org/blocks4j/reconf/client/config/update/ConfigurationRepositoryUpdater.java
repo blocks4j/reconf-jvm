@@ -2,7 +2,7 @@ package org.blocks4j.reconf.client.config.update;
 
 import org.blocks4j.reconf.client.config.ConfigurationRepository;
 import org.blocks4j.reconf.client.elements.ConfigurationRepositoryElement;
-import org.blocks4j.reconf.client.setup.Environment;
+import org.blocks4j.reconf.client.setup.AbstractEnvironment;
 import org.blocks4j.reconf.client.setup.config.ConnectionSettings;
 import org.blocks4j.reconf.infra.log.LoggerHolder;
 import org.blocks4j.reconf.infra.shutdown.ShutdownBean;
@@ -24,13 +24,13 @@ public class ConfigurationRepositoryUpdater implements Runnable, ShutdownBean {
 
     private ExecutorService executorService;
 
-    public ConfigurationRepositoryUpdater(Environment environment, ConnectionSettings connectionSettings, ConfigurationRepository repository, ConfigurationRepositoryElement configurationRepositoryElement) {
+    public ConfigurationRepositoryUpdater(AbstractEnvironment environment, ConfigurationRepository repository, ConfigurationRepositoryElement configurationRepositoryElement) {
         this.repository = repository;
-        this.connectionSettings = connectionSettings;
+        this.connectionSettings = environment.getConnectionSettings();
         this.configurationRepositoryElement = configurationRepositoryElement;
 
         this.loadExecutorService();
-        this.loadRemoteRequisitors(environment, connectionSettings);
+        this.loadRemoteRequisitors(environment);
 
         this.run();
 
@@ -53,11 +53,11 @@ public class ConfigurationRepositoryUpdater implements Runnable, ShutdownBean {
 
     }
 
-    private void loadRemoteRequisitors(Environment environment, ConnectionSettings connectionSettings) {
+    private void loadRemoteRequisitors(AbstractEnvironment environment) {
         this.remoteConfigurationItemRequisitors = new ArrayList<>();
 
         this.configurationRepositoryElement.getConfigurationItems().forEach(configurationItemElement ->
-                this.remoteConfigurationItemRequisitors.add(new RemoteConfigurationItemRequisitor(environment, connectionSettings, configurationItemElement))
+                this.remoteConfigurationItemRequisitors.add(new RemoteConfigurationItemRequisitor(environment, configurationItemElement))
         );
 
         this.remoteConfigurationItemRequisitors = Collections.synchronizedList(this.remoteConfigurationItemRequisitors);
@@ -68,11 +68,11 @@ public class ConfigurationRepositoryUpdater implements Runnable, ShutdownBean {
         try {
             syncNow();
         } catch (Throwable throwable) {
-            LoggerHolder.getLog().warn("Error");
+            LoggerHolder.getLog().warn("Error", throwable);
         }
     }
 
-    public void syncNow() {
+    private void syncNow() {
         this.syncNow(UpdateConfigurationRepositoryException.class);
     }
 
@@ -87,7 +87,7 @@ public class ConfigurationRepositoryUpdater implements Runnable, ShutdownBean {
 
             fullSyncResult = fullSyncResultFuture.get(this.connectionSettings.getTimeout(), this.connectionSettings.getTimeUnit());
         } catch (Throwable throwable) {
-            this.throwException(exceptionClass);
+            this.throwException(exceptionClass, throwable);
         }
 
         if (hasError(fullSyncResult)) {
@@ -111,11 +111,23 @@ public class ConfigurationRepositoryUpdater implements Runnable, ShutdownBean {
         }
     }
 
+    private void throwException(Class<? extends RuntimeException> exceptionClass, Throwable cause) {
+        try {
+            Constructor<? extends RuntimeException> constructor = exceptionClass.getConstructor(String.class, Throwable.class);
+            constructor.setAccessible(true);
+            throw constructor.newInstance("Error", cause);
+        } catch (Exception ignored) {
+            throw new UpdateConfigurationRepositoryException("Error", cause);
+        }
+    }
+
     private CompletableFuture<List<ConfigurationItemUpdateResult>> appendAsyncConfigurationSyncJob(CompletableFuture<List<ConfigurationItemUpdateResult>> fullSyncResultFuture, RemoteConfigurationItemRequisitor requisitor) {
         return fullSyncResultFuture.thenCombine(CompletableFuture.supplyAsync(requisitor::doRequest, this.executorService),
                 (fullSyncResult, currentResult) -> {
+                    if (currentResult.isSuccess()) {
+                        currentResult = this.repository.update(currentResult);
+                    }
                     fullSyncResult.add(currentResult);
-                    this.repository.update(currentResult);
                     return fullSyncResult;
                 });
     }

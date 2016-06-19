@@ -18,11 +18,9 @@ package org.blocks4j.reconf.client.config.update;
 import org.apache.commons.lang3.ArrayUtils;
 import org.blocks4j.reconf.adapter.ConfigurationAdapter;
 import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
-import org.blocks4j.reconf.client.factory.ServerStubFactory;
-import org.blocks4j.reconf.client.setup.Environment;
-import org.blocks4j.reconf.client.setup.config.ConnectionSettings;
+import org.blocks4j.reconf.client.setup.AbstractEnvironment;
 import org.blocks4j.reconf.data.MethodReturnData;
-import org.blocks4j.reconf.infra.http.ServerStub;
+import org.blocks4j.reconf.infra.http.ReconfServer;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 
 import java.lang.reflect.Constructor;
@@ -36,13 +34,13 @@ public class RemoteConfigurationItemRequisitor {
 
     private final static MessagesBundle msg = MessagesBundle.getBundle(RemoteConfigurationItemRequisitor.class);
 
-    private ServerStub stub;
+    private ReconfServer stub;
     private ConfigurationItemElement configurationItemElement;
     private ConfigurationAdapter configurationAdapter;
     private Type returnType;
 
-    public RemoteConfigurationItemRequisitor(Environment environment, ConnectionSettings connectionSettings, ConfigurationItemElement configurationItemElement) {
-        this.stub = this.createStub(environment.getServerStubFactory(), connectionSettings, configurationItemElement);
+    public RemoteConfigurationItemRequisitor(AbstractEnvironment environment, ConfigurationItemElement configurationItemElement) {
+        this.stub = environment.getReconfServerStub();
         this.configurationItemElement = configurationItemElement;
         this.configurationAdapter = this.getRemoteAdapter(configurationItemElement);
         this.returnType = this.getReturnType(configurationItemElement);
@@ -69,7 +67,9 @@ public class RemoteConfigurationItemRequisitor {
     public ConfigurationItemUpdateResult doRequest() {
         ConfigurationItemUpdateResult.Builder itemUpdateBuilder;
         try {
-            String rawValue = this.stub.get(this.configurationItemElement.getValue());
+            String rawValue = this.stub.get(this.configurationItemElement.getProduct(),
+                    this.configurationItemElement.getComponent(),
+                    this.configurationItemElement.getValue());
 
             MethodReturnData methodData = new MethodReturnData(this.returnType, rawValue);
             itemUpdateBuilder = ConfigurationItemUpdateResult.Builder.update(this.configurationAdapter.adapt(methodData))
@@ -101,12 +101,5 @@ public class RemoteConfigurationItemRequisitor {
         } catch (Throwable t) {
             throw new IllegalArgumentException(msg.get("error.adapter"), t);
         }
-    }
-
-    private ServerStub createStub(ServerStubFactory serverStubFactory, ConnectionSettings settings, ConfigurationItemElement configurationItemElement) {
-        ServerStub stub = serverStubFactory.serverStub(settings.getUrl(), settings.getTimeout(), settings.getTimeUnit(), settings.getMaxRetry());
-        stub.setComponent(configurationItemElement.getComponent());
-        stub.setProduct(configurationItemElement.getProduct());
-        return stub;
     }
 }

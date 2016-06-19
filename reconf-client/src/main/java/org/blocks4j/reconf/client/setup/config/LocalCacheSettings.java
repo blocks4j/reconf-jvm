@@ -30,6 +30,7 @@ public class LocalCacheSettings {
     public int getMaxLogFileSize() {
         return maxLogFileSize;
     }
+
     public void setMaxLogFileSize(int maxLogFileSize) {
         this.maxLogFileSize = maxLogFileSize;
     }
@@ -37,6 +38,7 @@ public class LocalCacheSettings {
     public boolean isCompressed() {
         return compressed;
     }
+
     public void setCompressed(boolean compressed) {
         this.compressed = compressed;
     }
@@ -44,6 +46,7 @@ public class LocalCacheSettings {
     public File getBackupLocation() {
         return backupLocation;
     }
+
     public void setBackupLocation(File backupLocation) {
         this.backupLocation = backupLocation;
     }
@@ -51,9 +54,9 @@ public class LocalCacheSettings {
     @Override
     public String toString() {
         ToStringBuilder result = new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
-        .append("location", getBackupLocation())
-        .append("compressed", isCompressed())
-        .append("max-log-file-size-mb", getMaxLogFileSize());
+                .append("location", getBackupLocation())
+                .append("compressed", isCompressed())
+                .append("max-log-file-size-mb", getMaxLogFileSize());
 
         return result.toString();
     }

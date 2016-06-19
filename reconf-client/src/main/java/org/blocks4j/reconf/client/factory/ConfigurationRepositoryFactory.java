@@ -23,8 +23,8 @@ import org.blocks4j.reconf.client.customization.Customization;
 import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
 import org.blocks4j.reconf.client.elements.ConfigurationRepositoryElement;
 import org.blocks4j.reconf.client.proxy.ConfigurationRepositoryProxyHandler;
+import org.blocks4j.reconf.client.setup.AbstractEnvironment;
 import org.blocks4j.reconf.client.setup.DefaultEnvironment;
-import org.blocks4j.reconf.client.setup.Environment;
 import org.blocks4j.reconf.client.setup.config.ReconfConfiguration;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 import org.blocks4j.reconf.infra.log.LoggerHolder;
@@ -41,8 +41,7 @@ public class ConfigurationRepositoryFactory implements ShutdownBean {
 
     private static final MessagesBundle msg = MessagesBundle.getBundle(ConfigurationRepositoryFactory.class);
 
-    private Environment environment;
-    private ReconfConfiguration reconfConfiguration;
+    private AbstractEnvironment environment;
 
     private ConfigurationRepository repository;
     private ConfigurationRepositoryElementFactory factory;
@@ -54,22 +53,17 @@ public class ConfigurationRepositoryFactory implements ShutdownBean {
         this(new DefaultEnvironment());
     }
 
-    public ConfigurationRepositoryFactory(Environment environment) {
-        this(environment, environment.getDefaultConfiguration());
-    }
-
     public ConfigurationRepositoryFactory(ReconfConfiguration reconfConfiguration) {
-        this(new DefaultEnvironment(), reconfConfiguration);
+        this(new DefaultEnvironment(reconfConfiguration));
     }
 
-    public ConfigurationRepositoryFactory(Environment environment, ReconfConfiguration reconfConfiguration) {
+    public ConfigurationRepositoryFactory(AbstractEnvironment environment) {
         this.environment = environment;
-        this.reconfConfiguration = reconfConfiguration;
 
         this.proxyCache = new ConcurrentHashMap<>();
         this.listenerCache = new ConcurrentHashMap<>();
-        this.factory = new ConfigurationRepositoryElementFactory(reconfConfiguration);
-        this.repository = new ConfigurationRepository();
+        this.factory = new ConfigurationRepositoryElementFactory(environment.getReconfConfiguration());
+        this.repository = environment.getRepository();
 
         this.scheduledExecutorService = this.createSchedulerService();
         this.environment.manageShutdownObject(this);
@@ -143,7 +137,7 @@ public class ConfigurationRepositoryFactory implements ShutdownBean {
 
     @SuppressWarnings("unchecked")
     private synchronized <T> T newInstance(Class<T> arg, ConfigurationRepositoryElement configurationRepositoryElement) {
-        ConfigurationRepositoryUpdater repositoryUpdater = new ConfigurationRepositoryUpdater(this.environment, this.reconfConfiguration.getConnectionSettings(), this.repository, configurationRepositoryElement);
+        ConfigurationRepositoryUpdater repositoryUpdater = new ConfigurationRepositoryUpdater(this.environment, this.repository, configurationRepositoryElement);
 
         this.scheduleUpdater(configurationRepositoryElement, repositoryUpdater);
 
@@ -155,7 +149,6 @@ public class ConfigurationRepositoryFactory implements ShutdownBean {
     }
 
     private void validateProxyLoad(Object proxyInstance, Class<?> proxyInterface) {
-
         for (Method method : proxyInterface.getMethods()) {
             Object methodReturn;
             try {
@@ -168,14 +161,13 @@ public class ConfigurationRepositoryFactory implements ShutdownBean {
                 throw new IllegalStateException();
             }
         }
-
     }
 
     private void scheduleUpdater(ConfigurationRepositoryElement configurationRepositoryElement, ConfigurationRepositoryUpdater repositoryUpdater) {
         this.scheduledExecutorService.scheduleWithFixedDelay(repositoryUpdater, configurationRepositoryElement.getRate(), configurationRepositoryElement.getRate(), configurationRepositoryElement.getTimeUnit());
     }
 
-    public Environment getEnvironment() {
+    public AbstractEnvironment getEnvironment() {
         return this.environment;
     }
 

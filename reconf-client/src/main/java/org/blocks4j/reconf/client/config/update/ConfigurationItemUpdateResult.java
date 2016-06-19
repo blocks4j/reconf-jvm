@@ -20,7 +20,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-public class ConfigurationItemUpdateResult {
+public class ConfigurationItemUpdateResult implements Cloneable {
 
     public enum Type {update, noChange, error}
 
@@ -102,10 +102,10 @@ public class ConfigurationItemUpdateResult {
         return result;
     }
 
-    static class Builder {
+    public static class Builder {
         private ConfigurationItemUpdateResult inner = new ConfigurationItemUpdateResult();
 
-        static Builder update(Object object) {
+        public static Builder update(Object object) {
             Builder result = new Builder();
             result.inner.type = Type.update;
             result.inner.object = object;
@@ -113,7 +113,7 @@ public class ConfigurationItemUpdateResult {
             return result;
         }
 
-        static Builder noChange() {
+        public static Builder noChange() {
             Builder result = new Builder();
             result.inner.type = Type.noChange;
             result.inner.object = null;
@@ -121,7 +121,7 @@ public class ConfigurationItemUpdateResult {
             return result;
         }
 
-        static Builder error(Throwable t) {
+        public static Builder error(Throwable t) {
             Builder result = new Builder();
             result.inner.type = Type.error;
             result.inner.object = null;
@@ -131,42 +131,42 @@ public class ConfigurationItemUpdateResult {
         }
 
 
-        Builder valueRead(String value) {
+        public Builder valueRead(String value) {
             this.inner.rawValue = value;
             return this;
         }
 
-        Builder product(String product) {
+        public Builder product(String product) {
             this.inner.product = product;
             return this;
         }
 
-        Builder component(String component) {
+        public Builder component(String component) {
             this.inner.component = component;
             return this;
         }
 
-        Builder item(String item) {
+        public Builder item(String item) {
             this.inner.item = item;
             return this;
         }
 
-        Builder method(Method method) {
+        public Builder method(Method method) {
             this.inner.method = method;
             return this;
         }
 
-        Builder cast(Class<?> cast) {
+        public Builder cast(Class<?> cast) {
             this.inner.cast = cast;
             return this;
         }
 
-        Builder from(Source source) {
+        public Builder from(Source source) {
             this.inner.source = source;
             return this;
         }
 
-        ConfigurationItemUpdateResult build() {
+        public ConfigurationItemUpdateResult build() {
             return this.inner;
         }
     }
