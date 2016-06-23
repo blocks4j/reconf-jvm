@@ -23,8 +23,8 @@ import org.blocks4j.reconf.client.customization.Customization;
 import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
 import org.blocks4j.reconf.client.elements.ConfigurationRepositoryElement;
 import org.blocks4j.reconf.client.proxy.ConfigurationRepositoryProxyHandler;
-import org.blocks4j.reconf.client.setup.AbstractEnvironment;
 import org.blocks4j.reconf.client.setup.DefaultEnvironment;
+import org.blocks4j.reconf.client.setup.Environment;
 import org.blocks4j.reconf.client.setup.config.ReconfConfiguration;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
 import org.blocks4j.reconf.infra.log.LoggerHolder;
@@ -35,18 +35,25 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 
 public class ConfigurationRepositoryFactory implements ShutdownBean {
 
     private static final MessagesBundle msg = MessagesBundle.getBundle(ConfigurationRepositoryFactory.class);
 
-    private AbstractEnvironment environment;
+    private Environment environment;
 
     private ConfigurationRepository repository;
     private ConfigurationRepositoryElementFactory factory;
     private final ConcurrentMap<String, Object> proxyCache;
     private final ConcurrentMap<String, Collection<? extends ConfigurationItemListener>> listenerCache;
+    private final Set<ConfigurationRepositoryUpdater> updatersCreated;
     private final ScheduledExecutorService scheduledExecutorService;
 
     public ConfigurationRepositoryFactory() {
@@ -57,9 +64,10 @@ public class ConfigurationRepositoryFactory implements ShutdownBean {
         this(new DefaultEnvironment(reconfConfiguration));
     }
 
-    public ConfigurationRepositoryFactory(AbstractEnvironment environment) {
+    public ConfigurationRepositoryFactory(Environment environment) {
         this.environment = environment;
 
+        this.updatersCreated = new HashSet<>();
         this.proxyCache = new ConcurrentHashMap<>();
         this.listenerCache = new ConcurrentHashMap<>();
         this.factory = new ConfigurationRepositoryElementFactory(environment.getReconfConfiguration());
@@ -138,6 +146,7 @@ public class ConfigurationRepositoryFactory implements ShutdownBean {
     @SuppressWarnings("unchecked")
     private synchronized <T> T newInstance(Class<T> arg, ConfigurationRepositoryElement configurationRepositoryElement) {
         ConfigurationRepositoryUpdater repositoryUpdater = new ConfigurationRepositoryUpdater(this.environment, this.repository, configurationRepositoryElement);
+        this.updatersCreated.add(repositoryUpdater);
 
         this.scheduleUpdater(configurationRepositoryElement, repositoryUpdater);
 
@@ -167,8 +176,12 @@ public class ConfigurationRepositoryFactory implements ShutdownBean {
         this.scheduledExecutorService.scheduleWithFixedDelay(repositoryUpdater, configurationRepositoryElement.getRate(), configurationRepositoryElement.getRate(), configurationRepositoryElement.getTimeUnit());
     }
 
-    public AbstractEnvironment getEnvironment() {
+    public Environment getEnvironment() {
         return this.environment;
+    }
+
+    public Set<ConfigurationRepositoryUpdater> getUpdatersCreated() {
+        return Collections.unmodifiableSet(this.updatersCreated);
     }
 
     @Override

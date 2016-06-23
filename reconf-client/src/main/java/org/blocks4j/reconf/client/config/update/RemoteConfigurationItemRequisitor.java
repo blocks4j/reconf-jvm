@@ -18,7 +18,7 @@ package org.blocks4j.reconf.client.config.update;
 import org.apache.commons.lang3.ArrayUtils;
 import org.blocks4j.reconf.adapter.ConfigurationAdapter;
 import org.blocks4j.reconf.client.elements.ConfigurationItemElement;
-import org.blocks4j.reconf.client.setup.AbstractEnvironment;
+import org.blocks4j.reconf.client.setup.Environment;
 import org.blocks4j.reconf.data.MethodReturnData;
 import org.blocks4j.reconf.infra.http.ReconfServer;
 import org.blocks4j.reconf.infra.i18n.MessagesBundle;
@@ -39,7 +39,7 @@ public class RemoteConfigurationItemRequisitor {
     private ConfigurationAdapter configurationAdapter;
     private Type returnType;
 
-    public RemoteConfigurationItemRequisitor(AbstractEnvironment environment, ConfigurationItemElement configurationItemElement) {
+    public RemoteConfigurationItemRequisitor(Environment environment, ConfigurationItemElement configurationItemElement) {
         this.stub = environment.getReconfServerStub();
         this.configurationItemElement = configurationItemElement;
         this.configurationAdapter = this.getRemoteAdapter(configurationItemElement);
@@ -68,27 +68,27 @@ public class RemoteConfigurationItemRequisitor {
         ConfigurationItemUpdateResult.Builder itemUpdateBuilder;
         try {
             String rawValue = this.stub.get(this.configurationItemElement.getProduct(),
-                    this.configurationItemElement.getComponent(),
-                    this.configurationItemElement.getValue());
+                                            this.configurationItemElement.getComponent(),
+                                            this.configurationItemElement.getValue());
 
             MethodReturnData methodData = new MethodReturnData(this.returnType, rawValue);
             itemUpdateBuilder = ConfigurationItemUpdateResult.Builder.update(this.configurationAdapter.adapt(methodData))
-                    .valueRead(rawValue)
-                    .product(this.configurationItemElement.getProduct())
-                    .component(this.configurationItemElement.getComponent())
-                    .item(this.configurationItemElement.getValue())
-                    .method(this.configurationItemElement.getMethod())
-                    .cast(this.configurationItemElement.getMethod().getReturnType())
-                    .from(ConfigurationItemUpdateResult.Source.server);
+                                                                     .valueRead(rawValue)
+                                                                     .product(this.configurationItemElement.getProduct())
+                                                                     .component(this.configurationItemElement.getComponent())
+                                                                     .item(this.configurationItemElement.getValue())
+                                                                     .method(this.configurationItemElement.getMethod())
+                                                                     .cast(this.configurationItemElement.getMethod().getReturnType())
+                                                                     .from(ConfigurationItemUpdateResult.Source.server);
 
         } catch (Throwable throwable) {
             itemUpdateBuilder = ConfigurationItemUpdateResult.Builder.error(throwable)
-                    .product(this.configurationItemElement.getProduct())
-                    .component(this.configurationItemElement.getComponent())
-                    .item(this.configurationItemElement.getValue())
-                    .method(this.configurationItemElement.getMethod())
-                    .cast(this.configurationItemElement.getMethod().getReturnType())
-                    .from(ConfigurationItemUpdateResult.Source.server);
+                                                                     .product(this.configurationItemElement.getProduct())
+                                                                     .component(this.configurationItemElement.getComponent())
+                                                                     .item(this.configurationItemElement.getValue())
+                                                                     .method(this.configurationItemElement.getMethod())
+                                                                     .cast(this.configurationItemElement.getMethod().getReturnType())
+                                                                     .from(ConfigurationItemUpdateResult.Source.server);
         }
 
         return itemUpdateBuilder.build();

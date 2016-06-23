@@ -15,21 +15,40 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-public class PropertiesFileParser {
+public class PropertiesParser {
 
-    private InputStream inputStream;
+    private Properties properties;
     private String prefix;
 
-    private PropertiesFileParser(InputStream inputStream) {
-        this.inputStream = inputStream;
+    private PropertiesParser() {
+        this(new Properties());
+
+    }
+
+    private PropertiesParser(Properties properties) {
+        this.properties = properties;
         this.prefix = StringUtils.EMPTY;
     }
 
-    public static PropertiesFileParser forInputStream(InputStream inputStream) {
-        return new PropertiesFileParser(inputStream);
+    public static PropertiesParser forInputStream(InputStream inputStream) {
+        return new PropertiesParser()
+                .withInputStream(inputStream);
     }
 
-    public PropertiesFileParser withPrefix(String prefix) {
+    public static PropertiesParser withProperties(Properties properties) {
+        return new PropertiesParser(properties);
+    }
+
+    public PropertiesParser withInputStream(InputStream inputStream) {
+        try {
+            this.properties.load(inputStream);
+        } catch (Exception e) {
+            throw new ReConfInitializationError("error parsing the configuration file with content" + LineSeparator.value() + this.properties, e);
+        }
+        return this;
+    }
+
+    public PropertiesParser withPrefix(String prefix) {
         if (StringUtils.isNotBlank(prefix)) {
             this.prefix = prefix;
         }
@@ -37,13 +56,10 @@ public class PropertiesFileParser {
     }
 
     public ReconfConfiguration parse() {
-        Properties content = new Properties();
         try {
-            content.load(this.inputStream);
-
             Map<String, String> properties = new LinkedHashMap<>();
 
-            for (Map.Entry<Object, Object> entry : content.entrySet()) {
+            for (Map.Entry<Object, Object> entry : this.properties.entrySet()) {
                 Object entryValue = entry.getValue();
                 String value = entryValue == null ? "" : entryValue.toString();
                 properties.put(entry.getKey().toString().toLowerCase(Locale.ENGLISH), value);
@@ -55,7 +71,7 @@ public class PropertiesFileParser {
 
             return reconfConfiguration;
         } catch (Exception e) {
-            throw new ReConfInitializationError("error parsing the configuration file with content" + LineSeparator.value() + content, e);
+            throw new ReConfInitializationError("error parsing the configuration file with content" + LineSeparator.value() + this.properties, e);
         }
     }
 
