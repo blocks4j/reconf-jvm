@@ -20,7 +20,7 @@
     <groupId>org.blocks4j.reconf</groupId>
     <artifactId>reconf-parent</artifactId>
     <packaging>pom</packaging>
-    <version>4.0.0.M2-SNAPSHOT</version>
+    <version>4.0.0.M1-SNAPSHOT</version>
     <name>ReConf JVM Parent</name>
     <description>ReConf JVM Client</description>
     <url>http://github.com/blocks4j/reconf-jvm</url>
