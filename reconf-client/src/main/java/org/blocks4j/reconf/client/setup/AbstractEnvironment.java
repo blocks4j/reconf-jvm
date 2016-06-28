@@ -11,7 +11,6 @@ import org.blocks4j.reconf.infra.shutdown.ShutdownInterceptor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractEnvironment implements Environment {
 
@@ -52,12 +51,6 @@ public abstract class AbstractEnvironment implements Environment {
     @Override
     public void shutdown() {
         this.managedShutdownObjects.forEach(ShutdownBean::shutdown);
-
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         this.reset();
     }
